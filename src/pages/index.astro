@@ -1,16 +1,25 @@
 ---
+import MainLayout from '@layouts/MainLayout.astro';
+
+const titlePage = 'InBalance | Inicio';
+const description =
+  'Website de InBalance, una plataforma contable por partida doble para la gestión financiera personal.';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout titlePage={titlePage} description={description}>
+  <section class="section_principal">
+    <h1>Astro</h1>
+  </section>
+</MainLayout>
+
+<style>
+  .section_principal {
+    width: calc(100dvw - 4rem);
+    min-height: calc(100dvh - 4rem);
+    background-color: #161618;
+    margin: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
