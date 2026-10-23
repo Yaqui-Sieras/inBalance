@@ -1,0 +1,34 @@
+---
+// @components/UI/Common/Portal.astro
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+  // Selector opcional por si quieres moverlo a otro contenedor que no sea el body
+  target?: string;
+}
+
+const { target = 'body', ...rest } = Astro.props;
+---
+
+<astro-portal data-target={target} {...rest}>
+  <slot />
+</astro-portal>
+
+<script>
+  class AstroPortal extends HTMLElement {
+    connectedCallback() {
+      const targetSelector = this.dataset.target || 'body';
+      const targetElement = document.querySelector(targetSelector);
+
+      if (targetElement) {
+        // Mueve este nodo y todo su contenido hijo directamente al destino (ej. el body)
+        targetElement.appendChild(this);
+      }
+    }
+  }
+
+  // Registramos el Web Component personalizado para Astro
+  if (!customElements.get('astro-portal')) {
+    customElements.define('astro-portal', AstroPortal);
+  }
+</script>

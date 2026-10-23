@@ -1,0 +1,90 @@
+---
+// @components/UI/Common/Input.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import type { StyleProps } from '@types-local/commonUI';
+import { getCssVariables } from '@utils/commonUIUtils';
+
+interface Props extends HTMLAttributes<'input'> {
+  type?: 'text' | 'email' | 'password' | 'number' | 'search';
+  value?: string | number;
+  placeholder?: string;
+  baseCSS?: StyleProps;
+  hoverCSS?: StyleProps;
+  focusCSS?: StyleProps;
+  disabledCSS?: StyleProps;
+  style?: Properties;
+}
+
+const {
+  type = 'text',
+  value,
+  placeholder = '',
+  baseCSS = {},
+  hoverCSS = {},
+  focusCSS = {},
+  disabledCSS = {},
+  disabled,
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+---
+
+<input
+  type={type}
+  value={value}
+  placeholder={placeholder}
+  disabled={disabled}
+  class:list={['ui_input', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+    // Inyectamos las variables de los objeto de Pseudoclases
+    ...getCssVariables('base', baseCSS),
+    ...getCssVariables('hover', hoverCSS),
+    ...getCssVariables('focus', focusCSS),
+    ...getCssVariables('disabled', disabledCSS),
+  }}
+  {...rest}
+/>
+
+<style>
+  .ui_input {
+    width: 100%;
+    font-family: var(--base-font-family, inherit);
+    font-weight: var(--base-font-weight, normal);
+    font-size: var(--base-font-size, 0.875rem);
+    color: var(--base-color, #1f2937);
+    background: var(--base-background, #ffffff);
+    padding: var(--base-padding, 0.5rem 0.75rem);
+    border: var(--base-border, 1px solid #d1d5db);
+    border-radius: var(--base-border-radius, 0.375rem);
+    box-shadow: var(--base-box-shadow, none);
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+
+    &:focus {
+      outline: none;
+      font-family: var(--focus-font-family, var(--base-font-family, inherit));
+      font-weight: var(--focus-font-weight, var(--base-font-weight, normal));
+      font-size: var(--focus-font-size, var(--base-font-size, 0.875rem));
+      color: var(--focus-color, var(--base-color, #1f2937));
+      background: var(--focus-background, var(--base-background, #ffffff));
+      padding: var(--focus-padding, var(--base-padding, 0.5rem 0.75rem));
+      border: var(--focus-border, 1px solid #2563eb);
+      box-shadow: var(--focus-box-shadow, 0 0 0 3px rgba(37, 99, 235, 0.2));
+    }
+
+    &:disabled,
+    &[aria-disabled='true'] {
+      color: var(--disabled-color, #9ca3af);
+      background: var(--disabled-background, #f3f4f6);
+      border: var(--disabled-border, 1px solid #e5e7eb);
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+  }
+</style>

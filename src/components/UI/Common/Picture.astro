@@ -1,0 +1,141 @@
+---
+// @components/UI/Common/Picture.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { ImageMetadata } from 'astro';
+import type { Properties } from 'csstype';
+import type { StyleProps } from '@types-local/commonUI';
+import { getCssVariables } from '@utils/commonUIUtils';
+import Img from '@components/UI/Common/Img.astro';
+
+interface SourceConfig {
+  srcSet: string;
+  media?: string;
+  type?: string;
+}
+
+interface Props extends HTMLAttributes<'figure'> {
+  imgMd?: ImageMetadata;
+  src?: string;
+  alt: string;
+  sources?: SourceConfig[]; // Para múltiples fuentes responsivas o formatos (AVIF/WebP)
+  width?: number | `${number}`;
+  height?: number | `${number}`;
+  blur?: string;
+  brightness?: number;
+  variant?: 'card' | 'raw';
+  caption?: string;
+  baseCSS?: StyleProps;
+  hoverCSS?: StyleProps;
+  style?: Properties;
+}
+
+const {
+  imgMd,
+  src,
+  alt,
+  sources = [],
+  width,
+  height,
+  blur = '0px',
+  brightness = 1,
+  variant = 'raw',
+  caption,
+  baseCSS = {},
+  hoverCSS = {},
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+
+const imageSrc = typeof imgMd !== 'undefined' ? imgMd.src : src;
+---
+
+<figure
+  class:list={[
+    'ui_picture__wrapper',
+    variant === 'card' && 'ui_picture__wrapper--card',
+    className,
+  ]}
+  style={{
+    '--bg-img': `url(${imageSrc})`,
+    '--effect-blur': blur,
+    '--effect-brightness': brightness,
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+    // Inyectamos las variables del objeto baseCSS y hoverCSS
+    ...getCssVariables('base', baseCSS),
+    ...getCssVariables('hover', hoverCSS),
+  }}
+  {...rest}
+>
+  <picture class="ui_picture">
+    {sources.map(({ srcSet, media, type }) => (
+      <source srcset={srcSet} media={media} type={type} />
+    ))}
+    <Img
+      imgMd={imgMd}
+      src={imageSrc}
+      alt={alt}
+      width={width}
+      height={height}
+      class="ui_picture__img"
+    />
+  </picture>
+
+  {caption && <figcaption class="ui_picture__caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .ui_picture__wrapper {
+    position: relative;
+    margin: 0;
+    display: inline-flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: var(--base-width, auto);
+    max-width: var(--base-max-width, 100%);
+    border-radius: var(--base-border-radius, 0);
+  }
+
+  .ui_picture {
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Variante Tarjeta */
+  .ui_picture__wrapper--card {
+    padding: 1.5rem;
+    background-color: #151617;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ui_picture__wrapper--card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-image: var(--bg-img);
+    background-size: cover;
+    background-position: center;
+    filter: blur(var(--effect-blur)) brightness(var(--effect-brightness));
+    transform: scale(1.1);
+    z-index: 0;
+  }
+
+  .ui_picture__img {
+    border-radius: 1rem;
+  }
+
+  .ui_picture__caption {
+    position: relative;
+    z-index: 1;
+    margin-top: 0.75rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #a3a3a3;
+  }
+</style>

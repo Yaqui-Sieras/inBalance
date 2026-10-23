@@ -1,0 +1,60 @@
+---
+// @components/UI/Common/BoxContainer.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import type { StyleProps } from '@types-local/commonUI';
+import { getCssVariables } from '@utils/commonUIUtils';
+
+interface Props extends HTMLAttributes<'div'> {
+  baseCSS?: StyleProps;
+  hoverCSS?: StyleProps;
+  style?: Properties;
+}
+
+const {
+  baseCSS = {},
+  hoverCSS = {},
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+---
+
+<div
+  class:list={['ui_box', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+    // Inyectamos las variables del objeto baseCSS y hoverCSS
+    ...getCssVariables('base', baseCSS),
+    ...getCssVariables('hover', hoverCSS),
+  }}
+  {...rest}
+>
+  <slot />
+</div>
+
+<style>
+  .ui_box {
+    box-sizing: border-box;
+    display: var(--base-display, block);
+    position: var(--base-position, static);
+    width: var(--base-width, auto);
+    max-width: var(--base-max-width, none);
+    height: var(--base-height, auto);
+    min-height: var(--base-min-height, auto);
+    background: var(--base-background, transparent);
+    padding: var(--base-padding, initial);
+    border: var(--base-border, none);
+    border-radius: var(--base-border-radius, 0);
+    overflow: var(--base-overflow, visible);
+    box-shadow: var(--base-box-shadow, none);
+    margin: var(--base-margin, 0);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--hover-background, var(--base-background, transparent));
+      border: var(--hover-border, var(--base-border, none));
+      box-shadow: var(--hover-box-shadow, var(--base-box-shadow, none));
+    }
+  }
+</style>
