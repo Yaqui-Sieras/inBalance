@@ -1,0 +1,209 @@
+---
+// @components/Home/PanelContable/LibroDiario.astro
+import type { LibroMayor } from '@/lib/LibroMayor';
+import type { Account, Transaction } from '@types-local/contabilidad';
+import AsientoItem from '@/components/Transacciones/LibroDiario/AsientoItem.astro';
+
+interface Props {
+  libroMayor: LibroMayor;
+}
+
+const { libroMayor } = Astro.props;
+
+// Obtenemos los datos
+const cuentas = libroMayor.getAccounts();
+const transacciones = libroMayor.getTransactions();
+const { totalDebit, totalCredit, imbalance } = libroMayor.getTrialBalance();
+
+const hasTransactions = transacciones.length > 0;
+---
+
+<article class="libro_diario">
+  <table class="libro_diario__asientos">
+    <caption class="asientos__caption">
+      Registro de asientos contables del periodo
+    </caption>
+    <colgroup>
+      <col class="asientos__column_cuenta" />
+      <col span="2" class="asientos__column_amounts" />
+    </colgroup>
+    <thead class="asientos__header">
+      <tr>
+        <th class="header__title">CUENTA AFECTADA</th>
+        <th class="header__title">DÉBITO (DEBE)</th>
+        <th class="header__title">CRÉDITO (HABER)</th>
+      </tr>
+    </thead>
+    {hasTransactions ? (
+      transacciones.map((tx) => (
+        <AsientoItem transaccion={tx} cuentas={cuentas} />
+      ))
+    ) : (
+      <tbody class="asientos__body">
+        <tr class="body__fila">
+          <td colspan="3" class="body__column">
+            <p class="body__empty">No hay transacciones registradas.</p>
+          </td>
+        </tr>
+      </tbody>
+    )}
+
+    <tfoot class="asientos__footer">
+      <tr class="footer__fila">
+        <td class="footer__column">Total</td>
+        <td
+          class:list={[
+            'footer__column',
+            hasTransactions ? 'footer__amounts' : 'footer__empty',
+          ]}
+        >
+          <span class="footer__span">
+            {hasTransactions ? `$${totalDebit.toFixed(2)}` : '-'}
+          </span>
+        </td>
+        <td
+          class:list={[
+            'footer__column',
+            hasTransactions ? 'footer__amounts' : 'footer__empty',
+          ]}
+        >
+          <span class="footer__span">
+            {hasTransactions ? `$${totalCredit.toFixed(2)}` : '-'}
+          </span>
+        </td>
+      </tr>
+      <tr class="footer__fila">
+        <td class="footer__column">Desbalance</td>
+        <td
+          colspan="2"
+          class:list={[
+            'footer__column',
+            hasTransactions ? 'footer__desbalance' : 'footer__empty',
+          ]}
+        >
+          <span class="footer__span">
+            {hasTransactions ? `$${imbalance.toFixed(2)}` : '-'}
+          </span>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</article>
+
+<style>
+  .libro_diario {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .libro_diario__asientos {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  }
+
+  .asientos__caption {
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #374151;
+    margin-bottom: 0.5rem;
+  }
+
+  .screen_reader_only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .asientos__column_cuenta {
+    width: 40%;
+  }
+
+  .asientos__column_amounts {
+    width: 30%;
+  }
+
+  .asientos__header {
+    background: #181b20;
+    /* #1d1f21 */
+  }
+
+  .header__title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 0.7rem 0.75rem;
+  }
+
+  .body__fila {
+    background: #111827;
+  }
+
+  .body__column {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .body__empty {
+    width: 70%;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.005em;
+    text-align: center;
+    background-color: #1e2640;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    margin-inline: auto;
+  }
+
+  .asientos__footer {
+    background-color: #1e2640;
+    /* #1a202c */
+  }
+
+  .footer__fila:not(:last-child) .footer__column {
+    border-bottom: solid 1px #374151;
+  }
+
+  .footer__column {
+    padding: 0.7rem 0.75rem;
+    border-right: 1px solid #374151;
+    text-align: left;
+  }
+
+  .footer__column:last-child {
+    border-right: none;
+  }
+
+  .footer__span {
+    font-family: monospace;
+    font-weight: 600;
+  }
+
+  .footer__amounts {
+    text-align: right;
+  }
+
+  .footer__desbalance {
+    text-align: center;
+  }
+
+  .footer__empty {
+    text-align: center;
+    & .footer__span {
+      color: #6b7280;
+    }
+  }
+</style>

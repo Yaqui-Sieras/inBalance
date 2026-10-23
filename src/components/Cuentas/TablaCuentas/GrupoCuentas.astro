@@ -1,0 +1,148 @@
+---
+// @components/Home/PanelContable/TablaCuentas/GrupoCuentas.astro
+import type { Account, AccountNature } from '@types-local/contabilidad';
+import { ACCOUNT_NATURE_CONFIG } from '@constants/contabilidadConfig';
+
+interface Props {
+  nature: AccountNature;
+  cuentas: Account[];
+}
+
+const { nature, cuentas } = Astro.props
+  ? Astro.props
+  : { nature: 'activo' as AccountNature, cuentas: [] };
+
+const config = ACCOUNT_NATURE_CONFIG[nature];
+const items = cuentas.filter((c) => c.nature.label === nature);
+const subtotal = items.reduce((acc, c) => acc + c.balance, 0);
+const tieneCuentas = items.length > 0;
+---
+
+<table class={`grupo__tabla grupo--${nature}`}>
+  <caption class="grupo__caption">{config.label.toUpperCase()}</caption>
+  <colgroup>
+    <col style="width: 50%;" />
+    <col style="width: 25%;" />
+    <col style="width: 25%;" />
+  </colgroup>
+  <thead class="grupo__header">
+    <tr>
+      <th class="text-left">Cuenta</th>
+      <th class="text-right">Débito</th>
+      <th class="text-right">Crédito</th>
+    </tr>
+  </thead>
+  <tbody class="grupo__body">
+    {tieneCuentas ? (
+      items.map((cuenta) => {
+        const esAcreedora = cuenta.nature.behavior === 'acreedora';
+        return (
+          <tr class="cuenta__fila">
+            <td class="cuenta__column cuenta__nombre">{cuenta.name}</td>
+            <td class="cuenta__column cuenta__amount text-right">
+              {!esAcreedora ? `$${cuenta.balance.toFixed(2)}` : '-'}
+            </td>
+            <td class="cuenta__column cuenta__amount text-right">
+              {esAcreedora ? `$${cuenta.balance.toFixed(2)}` : '-'}
+            </td>
+          </tr>
+        );
+      })
+    ) : (
+      <tr class="cuenta__fila">
+        <td colspan="3" class="cuenta__column empty-section text-center">
+          Sin cuentas
+        </td>
+      </tr>
+    )}
+  </tbody>
+  <tfoot class="grupo__footer">
+    <tr class="footer__fila">
+      <td class="footer__column subtotal__label">Total</td>
+      <td colspan="2" class="footer__column cuenta__amount text-right">
+        ${subtotal.toFixed(2)}
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+<style>
+  .grupo__tabla {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: #111827;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  }
+
+  .grupo__caption {
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.6rem 1rem;
+    text-align: left;
+    background: #1f2937;
+    color: #f3f4f6;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .grupo__header th {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.5rem 0.75rem;
+    background: #181b20;
+    color: #9ca3af;
+    border-bottom: 1px solid #374151;
+  }
+
+  .text-left {
+    text-align: left;
+  }
+  .text-center {
+    text-align: center;
+  }
+  .text-right {
+    text-align: right;
+  }
+
+  .cuenta__column {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #1f2937;
+    font-size: 0.9rem;
+  }
+
+  .cuenta__nombre {
+    color: #e5e7eb;
+  }
+
+  .cuenta__amount {
+    font-family: monospace;
+    font-weight: 600;
+    color: #f9fafb;
+  }
+
+  .empty-section {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #6b7280;
+  }
+
+  .grupo__footer {
+    background: #161b22;
+    font-weight: 600;
+  }
+
+  .footer__column {
+    padding: 0.6rem 0.75rem;
+    border-top: 1px solid #374151;
+  }
+
+  .subtotal__label {
+    text-align: right;
+    color: #9ca3af;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+</style>
