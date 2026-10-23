@@ -1,0 +1,121 @@
+---
+// @components/UI/Common/Link.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import type { StyleProps } from '@types-local/commonUI';
+import { getCssVariables } from '@utils/commonUIUtils';
+import { isExternalUrl } from '@utils/url';
+
+interface Props extends HTMLAttributes<'a'> {
+  href: string;
+  baseCSS?: StyleProps;
+  hoverCSS?: StyleProps;
+  focusCSS?: StyleProps;
+  activeCSS?: StyleProps;
+  disabledCSS?: StyleProps;
+  style?: Properties;
+}
+
+const {
+  href,
+  target,
+  baseCSS = {},
+  hoverCSS = {},
+  focusCSS = {},
+  activeCSS = {},
+  disabledCSS = {},
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+
+const isExternal = isExternalUrl(href);
+const finalTarget = target ?? (isExternal ? '_blank' : '_self');
+const rel = finalTarget === '_blank' ? 'noopener noreferrer' : undefined;
+---
+
+<a
+  class:list={['ui_link', className]}
+  href={href}
+  target={finalTarget}
+  rel={rel}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+    ...getCssVariables('base', baseCSS),
+    ...getCssVariables('hover', hoverCSS),
+    ...getCssVariables('focus', focusCSS),
+    ...getCssVariables('active', activeCSS),
+    ...getCssVariables('disabled', disabledCSS),
+  }}
+  {...rest}
+>
+  <slot />
+</a>
+
+<style>
+  .ui_link {
+    font-family: var(--base-font-family, inherit);
+    font-weight: var(--base-font-weight, inherit);
+    font-size: var(--base-font-size, inherit);
+    letter-spacing: var(--base-letter-spacing, inherit);
+    color: var(--base-color, inherit);
+    text-decoration: var(--base-text-decoration, none);
+    background: var(--base-background, transparent);
+    padding: var(--base-padding, initial);
+    border: var(--base-border, none);
+    border-bottom: var(--base-border-bottom, none);
+
+    transition: all 0.2s ease;
+
+    &:hover {
+      font-family: var(--hover-font-family, var(--base-font-family, inherit));
+      font-weight: var(--hover-font-weight, var(--base-font-weight, inherit));
+      font-size: var(--hover-font-size, var(--base-font-size, inherit));
+      color: var(--hover-color, var(--base-color, inherit));
+      text-decoration: var(
+        --hover-text-decoration,
+        var(--base-text-decoration, none)
+      );
+      background: var(--hover-background, var(--base-background, transparent));
+      padding: var(--hover-padding, var(--base-padding, initial));
+      border: var(--hover-border, var(--base-border, none));
+      border-bottom: var(
+        --hover-border-bottom,
+        var(--base-border-bottom, none)
+      );
+    }
+
+    &:focus {
+      font-family: var(--focus-font-family, var(--base-font-family, inherit));
+      font-weight: var(--focus-font-weight, var(--base-font-weight, inherit));
+      font-size: var(--focus-font-size, var(--base-font-size, inherit));
+      color: var(--focus-color, var(--base-color, inherit));
+      background: var(--focus-background, var(--base-background, transparent));
+      padding: var(--focus-padding, var(--base-padding, initial));
+      border: var(--focus-border, var(--base-border, none));
+      border-bottom: var(
+        --focus-border-bottom,
+        var(--base-border-bottom, none)
+      );
+    }
+
+    &:active {
+      color: var(--active-color, var(--base-color, inherit));
+      background: var(--active-background, var(--base-background, transparent));
+      padding: var(--active-padding, var(--base-padding, initial));
+      border: var(--active-border, var(--base-border, none));
+      border-bottom: var(
+        --active-border-bottom,
+        var(--base-border-bottom, none)
+      );
+    }
+
+    &:disabled,
+    &[aria-disabled='true'] {
+      color: var(--disabled-color, #a3a3a3);
+      background: var(--disabled-background, transparent);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  }
+</style>

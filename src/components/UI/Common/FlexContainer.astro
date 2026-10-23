@@ -1,0 +1,70 @@
+---
+// @components/UI/Common/FlexContainer.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import type { StyleProps } from '@types-local/commonUI';
+import { getCssVariables } from '@utils/commonUIUtils';
+
+interface Props extends HTMLAttributes<'div'> {
+  baseCSS?: Omit<StyleProps, 'display'>;
+  hoverCSS?: Omit<StyleProps, 'display'>;
+  style?: Properties;
+}
+
+const {
+  baseCSS = {},
+  hoverCSS = {},
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+
+const baseStyles: StyleProps = {
+  width: '100%',
+  maxWidth: '1280px',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  ...baseCSS,
+};
+---
+
+<div
+  class:list={['flex-container', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+    // Inyectamos las variables del objeto baseCSS y hoverCSS
+    ...getCssVariables('base', baseStyles),
+    ...getCssVariables('hover', hoverCSS),
+  }}
+  {...rest}
+>
+  <slot />
+</div>
+
+<style>
+  .flex-container {
+    box-sizing: border-box;
+    display: flex;
+    position: var(--base-position, static);
+    width: var(--base-width, 100%);
+    max-width: var(--base-max-width, 1280px);
+    height: var(--base-height, auto);
+    flex: var(--base-flex, initial);
+    flex-direction: var(--base-flex-direction, row);
+    align-items: var(--base-align-items, center);
+    justify-content: var(--base-justify-content, center);
+    gap: var(--base-gap, normal);
+
+    &:hover {
+      background: var(--hover-background, transparent);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .flex-container {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>
