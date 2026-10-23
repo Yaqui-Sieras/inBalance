@@ -1,61 +1,132 @@
 // src/constants/routest.ts
+import type { RouteConfigItem, NavItem, SocialLink } from '@types-local/routes';
+import { buildUrl, getTarget } from '@/utils/url';
 
-/**
- * Normaliza cualquier ruta o URL garantizando siempre una barra final ('/').
- */
-function ensureTrailingSlash(url: string): string {
-  if (!url) return '/';
-  return url.endsWith('/') ? url : `${url}/`;
-}
+export const ROUTES_CONFIG: Record<string, RouteConfigItem> = {
+  home: {
+    label: 'Inicio',
+    path: '/',
+    icon: '🏯',
+    showInNav: true,
+  },
+  accounts: {
+    label: 'Cuentas',
+    path: 'cuentas/',
+    icon: '🎭',
+    showInNav: true,
+  },
+  transactions: {
+    label: 'Transacciones',
+    path: 'transacciones/',
+    icon: '🧮',
+    showInNav: true,
+  },
+  demo: {
+    label: 'Demo',
+    path: 'demo/',
+    icon: '🧾',
+    showInNav: true,
+  },
+  githubRepo: {
+    label: 'GitHub Repo',
+    path: 'https://github.com/yaqui-sieras/inBalance',
+    target: '_blank',
+    icon: '🐈‍⬛',
+    showInNav: true,
+  },
+  // Rutas que solo existen como URLs pero NO van en el menú de navegación principal
+  gitHubAccount: {
+    label: 'Cuenta GitHub',
+    path: 'https://github.com/yaqui-sieras',
+    target: '_blank',
+    showInNav: false,
+  },
+  linkedin: {
+    label: 'LinkedIn',
+    path: 'https://linkedin.com/in/yaqui-sieras-vr/',
+    target: '_blank',
+    showInNav: false,
+  },
+  email: {
+    label: 'Email',
+    path: 'mailto:tu-email@ejemplo.com',
+    target: '_self',
+    showInNav: false,
+  },
+  privacy: {
+    label: 'Privacidad',
+    path: 'privacidad/',
+    showInNav: false,
+  },
+  terms: {
+    label: 'Términos y Condiciones',
+    path: 'terminos-condiciones/',
+    showInNav: false,
+  },
+  license: {
+    label: 'Licencia MIT',
+    path: 'LICENSE',
+    showInNav: false,
+  },
+} as const;
 
-export const BASE_URL = ensureTrailingSlash(import.meta.env.BASE_URL);
-// Dominio raíz en producción (ej. https://yaqui-sieras.github.io/)
-// En desarrollo local usa un fallback al dominio base de GitHub Pages.
-export const SITE_URL = ensureTrailingSlash(
-  import.meta.env.SITE || 'https://yaqui-sieras.github.io/',
-);
+// Generamos el objeto ROUTES plano
+// (para hacer redirecciones o links sueltos)
+export const ROUTES = Object.fromEntries(
+  Object.entries(ROUTES_CONFIG).map(([key, config]) => [
+    key.toUpperCase(),
+    buildUrl(config.path),
+  ]),
+) as Record<keyof typeof ROUTES_CONFIG, string>;
 
-/**
- * Determina si una URL o ruta dada apunta fuera del dominio de la aplicación.
- */
-export function isExternalUrl(url: string): boolean {
-  if (!url) return false;
-  if (url.startsWith('mailto:') || url.startsWith('tel:')) return true;
-  if (!url.startsWith('http://') && !url.startsWith('https://')) return false;
+// NAV_ITEMS filtrando los que tengan `showInNav: true`
+export const NAV_ITEMS: readonly NavItem[] = Object.values(ROUTES_CONFIG)
+  .filter((config) => config.showInNav)
+  .map((config) => ({
+    label: config.label,
+    href: buildUrl(config.path),
+    target: getTarget(config.path, config.target),
+    icon: config.icon ?? '',
+  }));
 
-  try {
-    const targetOrigin = new URL(url).origin;
-    const siteOrigin = new URL(SITE_URL).origin;
-    return targetOrigin !== siteOrigin;
-  } catch {
-    return false;
-  }
-}
+export const LEGAL_LINKS = [
+  {
+    label: ROUTES_CONFIG.license.label,
+    href: buildUrl(ROUTES_CONFIG.license.path),
+  },
+  {
+    label: ROUTES_CONFIG.terms.label,
+    href: buildUrl(ROUTES_CONFIG.terms.path),
+  },
+  {
+    label: ROUTES_CONFIG.privacy.label,
+    href: buildUrl(ROUTES_CONFIG.privacy.path),
+  },
+] as const;
 
-export interface BuildUrlOptions {
-  useAbsolute?: boolean;
-  isExternal?: boolean;
-}
-
-/**
- * Helper para construir URLs absolutas para repositorios externos o rutas locales de desarrollo.
- * @param path Ruta relativa, ej: "proyectos/"
- * @param absoluteSiEsPosible Si es true genera la URL completa.
- */
-export function buildUrl(path: string, options: BuildUrlOptions = {}): string {
-  const { useAbsolute = false } = options;
-
-  if (isExternalUrl(path)) {
-    return path;
-  }
-
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-
-  if (import.meta.env.DEV && useAbsolute) {
-    return `${BASE_URL}#${cleanPath}`;
-  }
-
-  const prefix = useAbsolute ? SITE_URL : BASE_URL;
-
-  return `${prefix}${cleanPath}`;
-}
+export const SOCIAL_LINKS: readonly SocialLink[] = [
+  {
+    name: ROUTES_CONFIG.gitHubAccount.label,
+    url: ROUTES_CONFIG.gitHubAccount.path,
+    target: getTarget(
+      ROUTES_CONFIG.gitHubAccount.path,
+      ROUTES_CONFIG.gitHubAccount.target,
+    ),
+    icon: ROUTES_CONFIG.gitHubAccount.icon ?? '',
+  },
+  {
+    name: ROUTES_CONFIG.linkedin.label,
+    url: ROUTES_CONFIG.linkedin.path,
+    target: getTarget(
+      ROUTES_CONFIG.linkedin.path,
+      ROUTES_CONFIG.linkedin.target,
+    ),
+    icon: ROUTES_CONFIG.linkedin.icon ?? '',
+  },
+  {
+    name: ROUTES_CONFIG.email.label,
+    url: ROUTES_CONFIG.email.path,
+    target: getTarget(ROUTES_CONFIG.email.path, ROUTES_CONFIG.email.target),
+    icon: ROUTES_CONFIG.email.icon ?? '',
+  },
+] as const;
