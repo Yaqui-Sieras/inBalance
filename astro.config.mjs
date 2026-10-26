@@ -2,7 +2,6 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import path from 'node:path';
-import node from '@astrojs/node';
 
 // Extracción limpia de datos del repositorio de GitHub Pages
 const ghRepository = process.env.GITHUB_REPOSITORY;
@@ -85,8 +84,4 @@ export default defineConfig({
 
   trailingSlash: 'always',
   integrations: [sitemap()],
-
-  adapter: node({
-    mode: 'standalone',
-  }),
 });
