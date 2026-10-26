@@ -1,0 +1,24 @@
+---
+// @pages/configuracion/index.astro
+import MainLayout from '@layouts/MainLayout.astro';
+import HeaderSection from '@components/UI/HeaderSection.astro';
+
+const titlePage = 'InBalance | Configuracion';
+const description = 'Pagina de configuracion.';
+---
+
+<MainLayout titlePage={titlePage} description={description}>
+  <section class="configuracion_section">
+    <HeaderSection>Configuracion</HeaderSection>
+  </section>
+</MainLayout>
+
+<style>
+  .configuracion_section {
+    width: 100%;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+</style>
