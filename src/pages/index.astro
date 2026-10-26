@@ -1,16 +1,109 @@
 ---
+// @pages/index.astro
+import MainLayout from '@layouts/MainLayout.astro';
+import { motorContable } from '@lib/LedgerManager';
+
+const titlePage = 'InBalance | Dashboard';
+const description = 'Panel de control principal de inBalance.';
+
+// Mostrar métricas rápidas (KPIs)
+const { totalDebit, totalCredit, imbalance } = motorContable.getTrialBalance();
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout titlePage={titlePage} description={description}>
+  <section class="dashboard">
+    <!-- Tarjetas de Resumen Rápido (KPIs) -->
+    <div class="dashboard__kpis">
+      <div class="kpi__card">
+        <h3>Total Débitos</h3>
+        <p class="kpi__amount">${totalDebit.toFixed(2)}</p>
+      </div>
+      <div class="kpi__card">
+        <h3>Total Créditos</h3>
+        <p class="kpi__amount">${totalCredit.toFixed(2)}</p>
+      </div>
+      <div class="kpi__card">
+        <h3>Balance</h3>
+        <p class="kpi__amount">${imbalance.toFixed(2)}</p>
+      </div>
+    </div>
+
+    <!-- Enlaces de Navegación a las Nuevas Páginas -->
+    <div class="dashboard__actions">
+      <a href="/cuentas/" class="btn btn--primary">
+        Ver Plan de Cuentas
+      </a>
+      <a href="/transacciones/" class="btn btn--secondary">
+        Ver Libro Diario
+      </a>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .dashboard {
+    width: 100%;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .dashboard__kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .kpi__card {
+    background: #1f1f23;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #27272a;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .kpi__card h3 {
+    font-size: 0.85rem;
+    color: #a1a1aa;
+    text-transform: uppercase;
+  }
+
+  .kpi__amount {
+    font-size: 1.5rem;
+    font-family: monospace;
+    font-weight: bold;
+    color: #f4f4f5;
+  }
+
+  .dashboard__actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .btn--primary {
+    background-color: #2563eb;
+    color: #fff;
+  }
+  .btn--primary:hover {
+    background-color: #1d4ed8;
+  }
+
+  .btn--secondary {
+    background-color: #27272a;
+    color: #f4f4f5;
+  }
+  .btn--secondary:hover {
+    background-color: #3f3f46;
+  }
+</style>

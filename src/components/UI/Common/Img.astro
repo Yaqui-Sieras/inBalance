@@ -1,0 +1,67 @@
+---
+// @components/UI/Common/Img.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { ImageMetadata } from 'astro';
+import type { Properties } from 'csstype';
+import type { StyleProps } from '@types-local/commonUI';
+import { getCssVariables } from '@utils/commonUIUtils';
+
+interface Props extends HTMLAttributes<'img'> {
+  imgMd?: ImageMetadata;
+  src?: string;
+  alt: string;
+  baseCSS?: StyleProps;
+  hoverCSS?: StyleProps;
+  style?: Properties;
+}
+
+const {
+  imgMd,
+  src,
+  alt,
+  baseCSS = {},
+  hoverCSS = {},
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+
+const imageSrc = typeof imgMd !== 'undefined' ? imgMd.src : src;
+---
+
+{imageSrc ? (
+  <img
+    src={imageSrc}
+    alt={alt}
+    class:list={['ui_img', className]}
+    style={{
+      ...(typeof userStyle === 'object' ? userStyle : {}),
+      // Inyectamos las variables del objeto baseCSS y hoverCSS
+      ...getCssVariables('base', baseCSS),
+      ...getCssVariables('hover', hoverCSS),
+    }}
+    {...rest}
+  />
+) : (
+  <p>No llega el src de la imagen</p>
+)}
+
+<style>
+  .ui_img {
+    max-width: var(--base-max-width, 100%);
+    width: var(--base-width, auto);
+    height: var(--base-height, auto);
+    object-fit: var(--base-object-fit, cover);
+    border-radius: var(--base-border-radius, 0);
+    display: var(--base-display, block);
+    opacity: var(--base-opacity, 1);
+    transition: all 0.2s ease;
+
+    &:hover {
+      opacity: var(--hover-opacity, var(--base-opacity, 1));
+      transform: var(--hover-transform, none);
+      filter: var(--hover-filter, none);
+      border-radius: var(--hover-border-radius, var(--base-border-radius, 0));
+    }
+  }
+</style>

@@ -1,0 +1,27 @@
+---
+// @pages/transacciones/index.astro
+import MainLayout from '@layouts/MainLayout.astro';
+import HeaderSection from '@components/UI/HeaderSection.astro';
+import LibroDiario from '@components/Transacciones/LibroDiario.astro';
+import { motorContable } from '@lib/LedgerManager.ts';
+
+const titlePage = 'InBalance | Transacciones';
+const description = 'Registro de asientos contables.';
+---
+
+<MainLayout titlePage={titlePage} description={description}>
+  <section class="transacciones_section">
+    <HeaderSection>Libro Diario (Asientos)</HeaderSection>
+    <LibroDiario libroMayor={motorContable} />
+  </section>
+</MainLayout>
+
+<style>
+  .transacciones_section {
+    width: 100%;
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+</style>

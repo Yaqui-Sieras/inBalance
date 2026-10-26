@@ -1,0 +1,60 @@
+---
+// @components/UI/Common/Video.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import type { StyleProps } from '@types-local/commonUI';
+import { getCssVariables } from '@utils/commonUIUtils';
+
+interface Props extends HTMLAttributes<'video'> {
+  src: string;
+  autoplay?: boolean;
+  loop?: boolean;
+  muted?: boolean;
+  controls?: boolean;
+  baseCSS?: StyleProps;
+  hoverCSS?: StyleProps;
+  style?: Properties;
+}
+
+const {
+  src,
+  autoplay = false,
+  loop = false,
+  muted = false,
+  controls = true,
+  baseCSS = {},
+  hoverCSS = {},
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+---
+
+<video
+  src={src}
+  autoplay={autoplay}
+  loop={loop}
+  muted={muted}
+  controls={controls}
+  class:list={['ui_video', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+    // Inyectamos las variables del objeto baseCSS y hoverCSS
+    ...getCssVariables('base', baseCSS),
+    ...getCssVariables('hover', hoverCSS),
+  }}
+  {...rest}
+>
+  Tu navegador no soporta el elemento de video.
+</video>
+
+<style>
+  .ui_video {
+    max-width: var(--base-max-width, 100%);
+    width: var(--base-width, 100%);
+    height: var(--base-height, auto);
+    display: block;
+    border-radius: var(--base-border-radius, 1rem);
+    box-shadow: var(--base-box-shadow, none);
+  }
+</style>

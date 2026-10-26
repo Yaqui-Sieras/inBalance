@@ -1,0 +1,99 @@
+---
+// @components/UI/Common/Text.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import type { StyleProps } from '@types-local/commonUI';
+import { getCssVariables } from '@utils/commonUIUtils';
+
+// Definimos las etiquetas HTML permitidas para tipografía
+type TextTag =
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+  | 'p'
+  | 'span'
+  | 'strong'
+  | 'em'
+  | 'label';
+
+interface Props extends HTMLAttributes<'p'> {
+  as?: TextTag;
+  variant?: 'display' | 'title' | 'body' | 'caption' | 'subtle';
+  baseCSS?: StyleProps;
+  hoverCSS?: StyleProps;
+  style?: Properties;
+}
+
+const {
+  as: Tag = 'p',
+  variant = 'body',
+  baseCSS = {},
+  hoverCSS = {},
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+---
+
+<Tag
+  class:list={['ui_text', `ui_text--${variant}`, className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+    // Inyectamos las variables del objeto baseCSS y hoverCSS
+    ...getCssVariables('base', baseCSS),
+    ...getCssVariables('hover', hoverCSS),
+  }}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .ui_text {
+    margin: 0;
+    font-family: var(--base-font-family, inherit);
+    font-weight: var(--base-font-weight, inherit);
+    font-size: var(--base-font-size, inherit);
+    color: var(--base-color, inherit);
+    text-decoration: var(--base-text-decoration, none);
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: var(--hover-color, var(--base-color, inherit));
+      font-weight: var(--hover-font-weight, var(--base-font-weight, inherit));
+    }
+  }
+
+  /* Variantes tipográficas base de tu design system */
+  .ui_text--display {
+    font-size: var(--base-font-size, 3rem);
+    font-weight: var(--base-font-weight, 800);
+    line-height: var(--base-line-height, 1.1);
+  }
+
+  .ui_text--title {
+    font-size: var(--base-font-size, 1.75rem);
+    font-weight: var(--base-font-weight, 700);
+    line-height: var(--base-line-height, 1.2);
+  }
+
+  .ui_text--body {
+    font-size: var(--base-font-size, 1rem);
+    font-weight: var(--base-font-weight, 400);
+    line-height: var(--base-line-height, 1.5);
+  }
+
+  .ui_text--caption {
+    font-size: var(--base-font-size, 0.875rem);
+    font-weight: var(--base-font-weight, 400);
+    line-height: var(--base-line-height, 1.4);
+  }
+
+  .ui_text--subtle {
+    font-size: var(--base-font-size, 0.875rem);
+    color: var(--base-color, #a3a3a3);
+  }
+</style>

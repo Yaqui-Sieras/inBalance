@@ -1,0 +1,31 @@
+---
+// @components/UI/Common/Spacer.astro
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+  size?: string | number; // Ej: '1rem', '24px', etc.
+  axis?: 'vertical' | 'horizontal';
+}
+
+const { size = '1rem', axis = 'vertical', ...rest } = Astro.props;
+
+const isVertical = axis === 'vertical';
+---
+
+<div
+  class="ui_spacer"
+  style={{
+    width: isVertical ? '100%' : size,
+    height: isVertical ? size : '100%',
+    minWidth: isVertical ? undefined : size,
+    minHeight: isVertical ? size : undefined,
+  }}
+  {...rest}
+/>
+
+<style>
+  .ui_spacer {
+    display: block;
+    flex-shrink: 0;
+  }
+</style>

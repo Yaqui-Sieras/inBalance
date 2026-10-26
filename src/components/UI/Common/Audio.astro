@@ -1,0 +1,70 @@
+---
+// @components/UI/Common/Audio.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import type { StyleProps } from '@types-local/commonUI';
+import { getCssVariables } from '@utils/commonUIUtils';
+
+interface AudioSource {
+  src: string;
+  type?: string; // Ej: 'audio/mpeg', 'audio/ogg'
+}
+
+interface Props extends HTMLAttributes<'audio'> {
+  src?: string;
+  sources?: AudioSource[];
+  controls?: boolean;
+  autoplay?: boolean;
+  loop?: boolean;
+  muted?: boolean;
+  preload?: 'none' | 'metadata' | 'auto';
+  baseCSS?: StyleProps;
+  hoverCSS?: StyleProps;
+  style?: Properties;
+}
+
+const {
+  src,
+  sources = [],
+  controls = true,
+  autoplay = false,
+  loop = false,
+  muted = false,
+  preload = 'metadata',
+  baseCSS = {},
+  hoverCSS = {},
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+---
+
+<audio
+  controls={controls}
+  autoplay={autoplay}
+  loop={loop}
+  muted={muted}
+  preload={preload}
+  class:list={['ui_audio', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+    // Inyectamos las variables del objeto baseCSS y hoverCSS
+    ...getCssVariables('base', baseCSS),
+    ...getCssVariables('hover', hoverCSS),
+  }}
+  {...rest}
+>
+  {src && <source src={src} />}
+  {sources.map(({ src, type }) => (
+    <source src={src} type={type} />
+  ))}
+  Tu navegador no soporta el elemento de audio.
+</audio>
+
+<style>
+  .ui_audio {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+  }
+</style>

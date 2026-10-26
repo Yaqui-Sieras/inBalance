@@ -1,0 +1,62 @@
+---
+// @components/UI/Common/GridContainer.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import type { StyleProps } from '@types-local/commonUI';
+import { getCssVariables } from '@utils/commonUIUtils';
+
+interface Props extends HTMLAttributes<'div'> {
+  baseCSS?: Omit<StyleProps, 'display'>;
+  hoverCSS?: Omit<StyleProps, 'display'>;
+  style?: Properties;
+}
+
+const {
+  baseCSS = {},
+  hoverCSS = {},
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+
+const baseStyles: StyleProps = {
+  width: '100%',
+  maxWidth: '1280px',
+  columns: 'repeat(auto-fit, minmax(280px, 1fr))',
+  ...baseCSS,
+};
+---
+
+<div
+  class:list={['grid-container', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+    // Inyectamos las variables del objeto baseCSS y hoverCSS
+    ...getCssVariables('base', baseStyles),
+    ...getCssVariables('hover', hoverCSS),
+  }}
+  {...rest}
+>
+  <slot />
+</div>
+
+<style>
+  .grid-container {
+    box-sizing: border-box;
+    display: grid;
+    position: var(--base-position, static);
+    width: var(--base-width, 100%);
+    max-width: var(--base-max-width, 1280px);
+    height: var(--base-height, auto);
+    grid-template-columns: var(
+      --base-grid-template-columns,
+      repeat(auto-fit, minmax(280px, 1fr))
+    );
+    grid-template-rows: var(--base-grid-template-rows, none);
+    gap: var(--base-gap, normal);
+    row-gap: var(--base-row-gap, normal);
+    column-gap: var(--base-column-gap, normal);
+    align-items: var(--base-align-items, normal);
+    justify-content: var(--base-justify-content, normal);
+  }
+</style>

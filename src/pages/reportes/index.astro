@@ -1,0 +1,24 @@
+---
+// @pages/configuracion/index.astro
+import MainLayout from '@layouts/MainLayout.astro';
+import HeaderSection from '@components/UI/HeaderSection.astro';
+
+const titlePage = 'InBalance | Reportes';
+const description = 'Pagina de reportes.';
+---
+
+<MainLayout titlePage={titlePage} description={description}>
+  <section class="reportes_section">
+    <HeaderSection>Reportes</HeaderSection>
+  </section>
+</MainLayout>
+
+<style>
+  .reportes_section {
+    width: 100%;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+</style>

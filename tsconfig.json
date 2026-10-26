@@ -7,10 +7,15 @@
       "@/*": ["./src/*"],
       "@layouts/*": ["./src/layouts/*"],
       "@components/*": ["./src/components/*"],
+      "@types-local/*": ["./src/types/*"],
       "@interfaces/*": ["./src/interfaces/*"],
       "@constants/*": ["./src/constants/*"],
-      "@content/*": ["./src/content/*"],
-      "@assets/*": ["./src/assets/*"]
+      "@repositories/*": ["./src/repositories/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@data/*": ["./src/data/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@content/*": ["./src/content/*"]
     }
   }
 }

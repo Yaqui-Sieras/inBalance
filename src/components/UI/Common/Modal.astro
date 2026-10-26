@@ -1,0 +1,97 @@
+---
+// @components/UI/Common/Modal.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import type { StyleProps } from '@types-local/commonUI';
+import { getCssVariables } from '@utils/commonUIUtils';
+
+interface Props extends HTMLAttributes<'dialog'> {
+  open?: boolean;
+  baseCSS?: StyleProps; // Estilos para la caja del modal
+  backdropCSS?: StyleProps; // Estilos para el fondo oscuro (::backdrop)
+  style?: Properties;
+}
+
+const {
+  open = false,
+  baseCSS = {},
+  backdropCSS = {},
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+---
+
+<dialog
+  open={open}
+  class:list={['ui_modal', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+    ...getCssVariables('base', baseCSS),
+    ...getCssVariables('backdrop', backdropCSS),
+  }}
+  {...rest}
+>
+  <div class="ui_modal_content">
+    <slot />
+  </div>
+</dialog>
+
+<style>
+  .ui_modal {
+    /* Estilos base del diálogo nativo */
+    font-family: var(--base-font-family, inherit);
+    color: var(--base-color, #1f2937);
+    background: var(--base-background, #ffffff);
+    padding: var(--base-padding, 1.5rem);
+    border: var(--base-border, none);
+    border-radius: var(--base-border-radius, 0.5rem);
+    box-shadow: var(
+      --base-box-shadow,
+      0 20px 25px -5px rgba(0, 0, 0, 0.1),
+      0 10px 10px -5px rgba(0, 0, 0, 0.04)
+    );
+    width: var(--base-width, 100%);
+    max-width: var(--base-max-width, 32rem);
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+
+    /* Animación de apertura nativa */
+    &[open] {
+      animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Estilización del fondo oscuro (Backdrop nativo) */
+    &::backdrop {
+      background: var(--backdrop-background, rgba(0, 0, 0, 0.5));
+      backdrop-filter: var(--backdrop-filter, blur(4px));
+      animation: backdropFadeIn 0.3s ease forwards;
+    }
+  }
+
+  .ui_modal_content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  @keyframes modalFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(1rem) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes backdropFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>

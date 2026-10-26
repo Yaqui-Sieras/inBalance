@@ -1,0 +1,29 @@
+---
+// @pages/cuentas/index.astro
+import MainLayout from '@layouts/MainLayout.astro';
+import HeaderSection from '@components/UI/HeaderSection.astro';
+import TablaCuentas from '@components/Cuentas/TablaCuentas.astro';
+import { motorContable } from '@lib/LedgerManager.ts';
+
+const cuentas = motorContable.getAccounts();
+
+const titlePage = 'InBalance | Cuentas';
+const description = 'Plan de cuentas contables.';
+---
+
+<MainLayout titlePage={titlePage} description={description}>
+  <section class="cuentas_section">
+    <HeaderSection>Plan de Cuentas</HeaderSection>
+    <TablaCuentas cuentas={cuentas} />
+  </section>
+</MainLayout>
+
+<style>
+  .cuentas_section {
+    width: 100%;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+</style>

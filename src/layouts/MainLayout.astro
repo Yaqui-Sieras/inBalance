@@ -1,0 +1,134 @@
+---
+// @layouts/MainLayout.astro
+import ContentHeader from '@components/UI/HeaderPage.astro';
+import ContentFooter from '@components/UI/FooterPage.astro';
+import { buildUrl } from '@utils/url';
+import faviconsvg from '@assets/favicons/favicon.svg';
+import ogImage from '@assets/imgs/og-image.png';
+import 'sentei-css';
+
+interface Props {
+  titlePage: string;
+  description?: string;
+  image?: string;
+  author?: string;
+}
+
+const {
+  titlePage,
+  description = 'Descripción por defecto de la página',
+  image = ogImage.src,
+  author = 'Yaqui-Sieras',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url);
+const socialImageURL = new URL(image, Astro.site || Astro.url);
+const faviconIcoPath = buildUrl('/favicon.ico');
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href={faviconsvg.src} />
+    <link rel="icon" href={faviconIcoPath} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Principal -->
+    <title>{titlePage}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={author} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={titlePage} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImageURL} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={titlePage} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageURL} />
+  </head>
+  <body>
+    <div class="page">
+      <header class="page__header">
+        <ContentHeader />
+      </header>
+
+      <main class="page__main">
+        <slot />
+      </main>
+
+      <footer class="page__footer">
+        <ContentFooter />
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  :root {
+    --max-screen-width: 1366px;
+  }
+  .page {
+    width: 100dvw;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .page__header {
+    width: 100%;
+    max-width: var(--max-screen-width);
+    padding-inline: 1.5rem;
+    background-color: #1b1d1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .page__main {
+    width: 100%;
+    max-width: var(--max-screen-width);
+    background-color: #151517;
+    padding: 0.75rem 1.5rem;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .page__footer {
+    width: 100%;
+    max-width: var(--max-screen-width);
+    padding: 0.75rem 1.5rem;
+    background-color: #1b1d1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (min-width: 1440px) {
+    .page {
+      padding: 1rem 1.5rem;
+    }
+
+    .page__header {
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+    }
+
+    .page__footer {
+      border-bottom-left-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+    }
+  }
+</style>

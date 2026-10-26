@@ -1,0 +1,99 @@
+---
+// @components/home/PanelContable/LibroDiario/AsientoItem.astro
+import type { Account, Transaction } from '@types-local/contabilidad';
+
+interface Props {
+  transaccion: Transaction;
+  cuentas: Account[];
+}
+
+const { transaccion, cuentas } = Astro.props;
+---
+
+<tbody class="asiento">
+  <tr>
+    <th colspan="3" class="asiento__glosa">
+      <div class="glosa__container">
+        <span>
+          <strong>Resumen:</strong> {transaccion.description}
+        </span>
+        <span class="text-muted">{transaccion.date}</span>
+      </div>
+    </th>
+  </tr>
+  {transaccion.lines.map((line) => {
+    const account = cuentas.find((a) => a.id === line.accountId);
+    return (
+      <tr class="asiento__fila">
+        <td class="asiento__column">
+          {account ? account.name : line.accountId}
+        </td>
+        <td class="asiento__column asiento__column_amounts">
+          {line.direction === 'debito' ? (
+            `$${line.amount.toFixed(2)}`
+          ) : (
+            <span class="text-muted">-</span>
+          )}
+        </td>
+        <td class="asiento__column asiento__column_amounts">
+          {line.direction === 'credito' ? (
+            `$${line.amount.toFixed(2)}`
+          ) : (
+            <span class="text-muted">-</span>
+          )}
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
+
+<style>
+  .asiento {
+    background: #111827;
+  }
+
+  .asiento__glosa {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #d1d5db;
+    background: #1f2937;
+    /* #212836 */
+    padding: 0.25rem 0.75rem;
+  }
+
+  .glosa__container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .glosa__container span strong {
+    font-style: normal;
+    color: #9ca3af;
+  }
+
+  .asiento__fila:not(:last-child) .asiento__column {
+    border-bottom: solid 1px #1f2937;
+  }
+
+  .asiento__column {
+    padding: 0.5rem 1.5rem;
+    border-right: 1px solid #374151;
+    text-align: left;
+  }
+
+  .asiento__column:last-child {
+    border-right: none;
+  }
+
+  .asiento__column_amounts {
+    font-family: monospace;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .text-muted {
+    color: #6b7280;
+  }
+</style>
