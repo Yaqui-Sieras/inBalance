@@ -1,24 +1,18 @@
 ---
 // @pages/demo/index.astro
 import MainLayout from '@layouts/MainLayout.astro';
+import HeaderSection from '@components/UI/HeaderSection.astro';
 
 const titlePage = 'InBalance | CargaDemo';
 const description = 'Pagina de carga de datos de demostracion.';
 ---
 
 <MainLayout titlePage={titlePage} description={description}>
-  <section class="demo">
-    <header class="demo__header">
-      <a href="/" class="header__back_link">
-        ← Volver al Dashboard
-      </a>
-      <h1 class="header__title">Datos de prueba</h1>
-    </header>
-    <div class="demo__content">
-      <button type="button" class="demo__btn_load" id="btn_load">
-        Cargar Datos de Prueba
-      </button>
-    </div>
+  <section class="demo_section">
+    <HeaderSection>Datos de prueba</HeaderSection>
+    <button type="button" class="demo__btn_load" id="btn_load">
+      Cargar Datos de Prueba
+    </button>
   </section>
 </MainLayout>
 
@@ -70,44 +64,15 @@ const description = 'Pagina de carga de datos de demostracion.';
 </script>
 
 <style>
-  .demo {
+  .demo_section {
     width: 100%;
     flex: 1 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: start;
+    gap: 1.5rem;
   }
 
-  .demo__header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .header__back_link {
-    color: #3b82f6;
-    text-decoration: none;
-    font-size: 0.9rem;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  .header__title {
-    color: #f4f4f5;
-    font-size: 1.75rem;
-  }
-
-  .demo__content {
-    flex: 1 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /*
   .demo__btn_load {
     padding: 0.75rem 1.5rem;
     background-color: #3b82f6;
@@ -127,5 +92,4 @@ const description = 'Pagina de carga de datos de demostracion.';
       cursor: not-allowed;
     }
   }
-  */
 </style>
