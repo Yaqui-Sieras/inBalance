@@ -8,8 +8,10 @@
   },
   "packageManager": "pnpm@12.18.0",
   "scripts": {
+    "format:check": "prettier --check .",
     "dev": "astro dev",
-    "build": "astro build",
+    "check": "astro sync && tsc --noEmit --runExternalCode",
+    "build": "pnpm run check && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
