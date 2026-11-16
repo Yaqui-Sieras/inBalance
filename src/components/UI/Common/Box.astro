@@ -1,0 +1,119 @@
+---
+// @components/UI/Common/Box.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties, Property } from 'csstype';
+
+type boxTag =
+  | 'div'
+  | 'header'
+  | 'nav'
+  | 'footer'
+  | 'main'
+  | 'aside'
+  | 'section'
+  | 'article';
+
+interface Props extends HTMLAttributes<'div'> {
+  as?: boxTag;
+  display?: Property.Display;
+  style?: Properties;
+}
+
+const {
+  as: Tag = 'div',
+  id: idName = '',
+  display = 'flex',
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+---
+
+<Tag
+  id={idName}
+  class:list={['ui_box', `ui_box--${display}`, className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+  }}
+  {...rest}
+>
+  <slot />
+</Tag>
+<style>
+  .ui_box {
+    transition: all 0.2s ease;
+  }
+
+  /* Valores <display-outside> */
+  .ui_box--block {
+    display: block;
+  }
+
+  .ui_box--inline {
+    display: inline;
+  }
+
+  .ui_box--inline-block {
+    display: inline-block;
+  }
+
+  /* Valores <display-inside> */
+  .ui_box--flex {
+    width: 100%;
+    max-width: 1280px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 640px) {
+    .ui_box--flex {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  .ui_box--grid {
+    width: 100%;
+    max-width: 1280px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: initial;
+    row-gap: initial;
+    column-gap: initial;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Valores <display-outside> más valores <display-inside> */
+  .ui_box--inline-flex {
+    display: inline-flex;
+  }
+
+  .ui_box--inline-grid {
+    display: inline-grid;
+  }
+
+  /* Valores <display-box> */
+  .ui_box--contents {
+    display: contents;
+  }
+
+  .ui_box--none {
+    display: none;
+  }
+
+  /* Valores globales */
+  .ui_box--inherit {
+    display: inherit;
+  }
+
+  .ui_box--initial {
+    display: initial;
+  }
+
+  .ui_box--unset {
+    display: unset;
+  }
+</style>
