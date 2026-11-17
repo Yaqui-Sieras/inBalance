@@ -212,7 +212,7 @@ function setupEventListeners(
         nameInput.value,
         passwordInput.value,
       );
-      window.location.href = ROUTES.HOME;
+      window.location.href = ROUTES.APPDASHBOARD;
     } catch (error) {
       console.error('Error al crear el usuario:', error);
       alert('Hubo un error al guardar el usuario en IndexedDB.');
@@ -251,7 +251,7 @@ function setupEventListeners(
 
     try {
       await verifyUserLogin(ledgerEngine, userID, passwordInput.value);
-      window.location.href = ROUTES.HOME;
+      window.location.href = ROUTES.APPDASHBOARD;
     } catch (error: any) {
       console.error('Error al autenticar el usuario:', error);
       alert(error.message || 'Hubo un error al procesar la autenticación.');
@@ -276,7 +276,7 @@ function setupEventListeners(
         await restoreBackupFromJsonString(ledgerEngine, jsonString);
 
         alert('¡Respaldo restaurado con éxito!');
-        window.location.href = ROUTES.HOME;
+        window.location.href = ROUTES.APPDASHBOARD;
       } catch (err) {
         console.error('Error al restaurar JSON:', err);
         alert('El archivo JSON no es válido o está corrupto.');

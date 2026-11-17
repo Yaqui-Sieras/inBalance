@@ -3,7 +3,7 @@
 import Box from '@components/UI/Common/Box.astro';
 import Link from '@components/UI/Common/Link.astro';
 import Navigation from '@components/UI/Common/Navigation.astro';
-import { NAV_ITEMS } from '@constants/routes';
+import { APP_NAV_ITEMS } from '@constants/routes';
 ---
 
 <Box class={'header_page__Container'}>
@@ -12,7 +12,7 @@ import { NAV_ITEMS } from '@constants/routes';
     <p class="header_page__subtitle">Tu salud financiera de un vistazo</p>
   </Link>
   <Navigation
-    links={NAV_ITEMS}
+    links={APP_NAV_ITEMS}
     navStyle={{ position: 'absolute', left: '40%', bottom: 0, gap: '1.25rem' }}
     linkClass={'nav_item'}
     linkCurrentClass={'nav_item--current'}

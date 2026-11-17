@@ -16,12 +16,12 @@ export async function checkAuthOrRedirect(currentPath: string): Promise<void> {
   const activeUserId = localStorage.getItem(STORAGE_KEYS.ACTIVE_USER_ID);
 
   // Verificamos si la ruta actual corresponde a la página de bienvenida/perfiles
-  const isWelcomePage = currentPath.includes(ROUTES.WELCOME);
+  const isWelcomePage = currentPath.includes(ROUTES.ACCESS);
 
   // CASO 1: No hay usuarios registrados en el dispositivo
   if (usuarios.length === 0) {
     if (!isWelcomePage) {
-      window.location.href = ROUTES.WELCOME;
+      window.location.href = ROUTES.ACCESS;
     }
     return;
   }
@@ -29,13 +29,13 @@ export async function checkAuthOrRedirect(currentPath: string): Promise<void> {
   // CASO 2: Hay usuarios, pero no se ha seleccionado una sesión activa
   if (!activeUserId) {
     if (!isWelcomePage) {
-      window.location.href = ROUTES.WELCOME;
+      window.location.href = ROUTES.ACCESS;
     }
     return;
   }
 
   // CASO 3: Hay sesión activa, pero el usuario intenta entrar a la página de bienvenida/login por error
   if (isWelcomePage && activeUserId) {
-    window.location.href = ROUTES.HOME;
+    window.location.href = ROUTES.APPDASHBOARD;
   }
 }
