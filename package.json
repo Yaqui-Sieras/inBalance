@@ -8,6 +8,7 @@
   },
   "packageManager": "pnpm@12.21.0",
   "scripts": {
+    "format": "prettier --write .",
     "format:check": "prettier --check .",
     "dev": "astro dev",
     "check": "astro sync && tsc --noEmit --runExternalCode",
