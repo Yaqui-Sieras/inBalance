@@ -1,30 +1,27 @@
-// src/constants/routest.ts
+// src/constants/routes.ts
 import type { RouteConfigItem, NavItem, SocialLink } from '@types-local/routes';
 import { buildUrl, getTarget } from '@/utils/url';
 
-export const ROUTES_CONFIG: Record<string, RouteConfigItem> = {
+export const ROUTES_CONFIG = {
   home: {
-    label: 'Inicio',
+    label: 'Dashboard',
     path: '/',
+    target: '_self',
     icon: '🏯',
     showInNav: true,
   },
   accounts: {
     label: 'Cuentas',
     path: 'cuentas/',
+    target: '_self',
     icon: '🎭',
     showInNav: true,
   },
   transactions: {
     label: 'Transacciones',
     path: 'transacciones/',
+    target: '_self',
     icon: '🧮',
-    showInNav: true,
-  },
-  demo: {
-    label: 'Demo',
-    path: 'demo/',
-    icon: '🧾',
     showInNav: true,
   },
   githubRepo: {
@@ -35,40 +32,59 @@ export const ROUTES_CONFIG: Record<string, RouteConfigItem> = {
     showInNav: true,
   },
   // Rutas que solo existen como URLs pero NO van en el menú de navegación principal
+  welcome: {
+    label: 'Bienvenida',
+    path: 'welcome/',
+    target: '_self',
+    icon: '👋',
+    showInNav: false,
+  },
   gitHubAccount: {
     label: 'Cuenta GitHub',
     path: 'https://github.com/yaqui-sieras',
     target: '_blank',
+    icon: '🐈‍⬛',
     showInNav: false,
   },
   linkedin: {
     label: 'LinkedIn',
     path: 'https://linkedin.com/in/yaqui-sieras-vr/',
     target: '_blank',
+    icon: '💼',
     showInNav: false,
   },
   email: {
     label: 'Email',
     path: 'mailto:tu-email@ejemplo.com',
     target: '_self',
+    icon: '✉️',
     showInNav: false,
   },
   privacy: {
     label: 'Privacidad',
     path: 'privacidad/',
+    target: '_blank',
+    icon: '✉️',
     showInNav: false,
   },
   terms: {
     label: 'Términos y Condiciones',
     path: 'terminos-condiciones/',
+    target: '_blank',
+    icon: '✉️',
     showInNav: false,
   },
   license: {
     label: 'Licencia MIT',
-    path: 'LICENSE',
+    path: 'LICENSE/',
+    target: '_blank',
+    icon: '✉️',
     showInNav: false,
   },
-} as const;
+} as const satisfies Record<string, RouteConfigItem>;
+
+export type RouteKey = keyof typeof ROUTES_CONFIG;
+export type RouteItem = (typeof ROUTES_CONFIG)[RouteKey];
 
 // Generamos el objeto ROUTES plano
 // (para hacer redirecciones o links sueltos)
@@ -77,7 +93,7 @@ export const ROUTES = Object.fromEntries(
     key.toUpperCase(),
     buildUrl(config.path),
   ]),
-) as Record<keyof typeof ROUTES_CONFIG, string>;
+) as Record<Uppercase<RouteKey>, string>;
 
 // NAV_ITEMS filtrando los que tengan `showInNav: true`
 export const NAV_ITEMS: readonly NavItem[] = Object.values(ROUTES_CONFIG)
@@ -85,8 +101,8 @@ export const NAV_ITEMS: readonly NavItem[] = Object.values(ROUTES_CONFIG)
   .map((config) => ({
     label: config.label,
     href: buildUrl(config.path),
-    target: getTarget(config.path, config.target),
-    icon: config.icon ?? '',
+    target: config.target,
+    icon: config.icon,
   }));
 
 export const LEGAL_LINKS = [
@@ -112,7 +128,7 @@ export const SOCIAL_LINKS: readonly SocialLink[] = [
       ROUTES_CONFIG.gitHubAccount.path,
       ROUTES_CONFIG.gitHubAccount.target,
     ),
-    icon: ROUTES_CONFIG.gitHubAccount.icon ?? '',
+    icon: ROUTES_CONFIG.gitHubAccount.icon,
   },
   {
     name: ROUTES_CONFIG.linkedin.label,
@@ -121,12 +137,12 @@ export const SOCIAL_LINKS: readonly SocialLink[] = [
       ROUTES_CONFIG.linkedin.path,
       ROUTES_CONFIG.linkedin.target,
     ),
-    icon: ROUTES_CONFIG.linkedin.icon ?? '',
+    icon: ROUTES_CONFIG.linkedin.icon,
   },
   {
     name: ROUTES_CONFIG.email.label,
     url: ROUTES_CONFIG.email.path,
     target: getTarget(ROUTES_CONFIG.email.path, ROUTES_CONFIG.email.target),
-    icon: ROUTES_CONFIG.email.icon ?? '',
+    icon: ROUTES_CONFIG.email.icon,
   },
 ] as const;
