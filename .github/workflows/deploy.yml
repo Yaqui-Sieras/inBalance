@@ -13,7 +13,7 @@ permissions:
 
 concurrency:
   group: 'pages'
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -28,17 +28,20 @@ jobs:
       - name: Setup Node.js con caché
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           cache: pnpm # ⚡ Acelera las futuras instalaciones
 
       - name: Setup Pages # 🔧 Configura rutas base automáticamente
         uses: actions/configure-pages@v4
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
+
+      - name: Tipos
+        run: pnpm check
 
       - name: Build project
-        run: pnpm run build
+        run: pnpm build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
