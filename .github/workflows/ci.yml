@@ -32,8 +32,14 @@ jobs:
       - name: Formato
         run: pnpm format:check
 
+      - name: Lint
+        run: pnpm lint
+
       - name: Tipos
         run: pnpm check
+
+      - name: Tests
+        run: pnpm test
 
       - name: Build
         run: pnpm build

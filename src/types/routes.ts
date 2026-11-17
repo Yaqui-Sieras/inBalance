@@ -1,12 +1,14 @@
 // @types-local/routes.ts
 
 export type a_target = '_self' | '_blank' | '_parent' | '_top' | '_unfencedTop';
+export type RouteScope = 'public' | 'private';
 
 export interface RouteConfigItem {
   label: string;
   path: string;
   target: a_target;
   icon: string;
+  scope: RouteScope;
   showInNav: boolean;
 }
 

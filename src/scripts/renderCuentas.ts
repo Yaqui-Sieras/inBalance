@@ -39,7 +39,7 @@ export async function renderizarPlanDeCuentas(): Promise<void> {
         for (const cuenta of items) {
           const esAcreedora = cuenta.nature.behavior === 'acreedora';
           subtotal += cuenta.balance;
-          const detalleUrl = `${ROUTES.ACCOUNTS}detalle?id=${cuenta.id}`;
+          const detalleUrl = `${ROUTES.APPACCOUNTS}detalle?id=${cuenta.id}`;
 
           html += `
           <tr class="cuenta__fila">

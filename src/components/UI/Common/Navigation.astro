@@ -2,7 +2,6 @@
 // @components/UI/Common/Navigation.astro
 import type { HTMLAttributes } from 'astro/types';
 import type { Properties } from 'csstype';
-import type { StyleProps } from '@types-local/commonUI';
 
 import type { NavItem } from '@types-local/routes';
 import Link from '@components/UI/Common/Link.astro';
@@ -19,7 +18,7 @@ interface Props extends HTMLAttributes<'nav'> {
   linkClass?: string;
   linkStyle?: Properties;
   linkCurrentClass?: string;
-  linkCurrentStyle?: StyleProps;
+  linkCurrentStyle?: Properties;
 }
 
 const {

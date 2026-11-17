@@ -8,10 +8,14 @@
   },
   "packageManager": "pnpm@12.21.0",
   "scripts": {
+    "dev": "astro dev",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "dev": "astro dev",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "check": "astro sync && tsc --noEmit --runExternalCode",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
@@ -19,10 +23,12 @@
   "devDependencies": {
     "@astrojs/ts-content-mapper": "0.2.0",
     "@types/node": "24.1.0",
+    "csstype": "3.2.3",
+    "oxlint": "1.94.0",
     "prettier": "3.10.1",
     "prettier-plugin-astro": "1.1.2",
-    "csstype": "3.2.3",
-    "typescript": "7.1.0-beta"
+    "typescript": "7.1.0-beta",
+    "vitest": "5.1.0"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.5",

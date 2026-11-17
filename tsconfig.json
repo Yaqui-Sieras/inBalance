@@ -1,7 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
   // Include the necessary files for your project
-  "include": ["src/**/*", "astro.config.mjs"],
+  "include": ["src/**/*", "astro.config.mjs", "tests/**/*"],
   //"include": [".astro/types.d.ts"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {

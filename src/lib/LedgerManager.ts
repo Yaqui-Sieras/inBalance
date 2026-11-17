@@ -1,5 +1,5 @@
 // @lib/LedgerManager.ts
-import { IndexedDBRepository } from '@repositories/IndexedDBRepository';
+import { IndexedDBRepository } from '@/repositories/IndexedDbRepository';
 import type { RepositorioContable } from '@repositories/RepositorioContable';
 import type { Account, Transaction } from '@types-local/contabilidad';
 
