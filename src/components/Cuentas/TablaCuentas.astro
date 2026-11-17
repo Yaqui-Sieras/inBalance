@@ -2,29 +2,23 @@
 // @components/home/TablaCuentas.astro
 import type { Account } from '@types-local/contabilidad';
 import GrupoCuentas from '@components/Cuentas/TablaCuentas/GrupoCuentas.astro';
-
-interface Props {
-  cuentas: Account[];
-}
-
-const { cuentas } = Astro.props;
 ---
 
 <div class="secciones__grid">
   <div class="grid__columna">
-    <GrupoCuentas nature="ingreso" cuentas={cuentas} />
+    <GrupoCuentas nature="ingreso" />
   </div>
   <div class="grid__columna">
-    <GrupoCuentas nature="activo" cuentas={cuentas} />
-    <GrupoCuentas nature="pasivo" cuentas={cuentas} />
+    <GrupoCuentas nature="activo" />
+    <GrupoCuentas nature="pasivo" />
   </div>
   <div class="grid__columna">
-    <GrupoCuentas nature="patrimonio" cuentas={cuentas} />
-    <GrupoCuentas nature="transitoria" cuentas={cuentas} />
+    <GrupoCuentas nature="patrimonio" />
+    <GrupoCuentas nature="transitoria" />
   </div>
   <div class="grid__columna">
-    <GrupoCuentas nature="gasto" cuentas={cuentas} />
-    <GrupoCuentas nature="costo" cuentas={cuentas} />
+    <GrupoCuentas nature="gasto" />
+    <GrupoCuentas nature="costo" />
   </div>
 </div>
 
@@ -44,120 +38,6 @@ const { cuentas } = Astro.props;
 </style>
 
 <!--
-<article class="cuentas">
-  <table class="cuentas__tabla">
-    <caption class="cuentas__caption">
-      Registro de saldos por cuenta contable
-    </caption>
-    <colgroup>
-      <col style="width: 40%;" />
-      <col style="width: 30%;" />
-      <col style="width: 30%;" />
-    </colgroup>
-    <thead class="cuentas__header">
-      <tr>
-        <th class="cuentas__title">Nombre</th>
-        <th class="cuentas__title">Naturaleza</th>
-        <th class="cuentas__title">Saldo Actual</th>
-      </tr>
-    </thead>
-    <tbody class="cuentas_tabla__body">
-      {cuentas.map((cuenta) => (
-        <tr class="cuenta__fila">
-          <td class="cuenta__column">
-            <span class="cuenta__nombre">{cuenta.name}</span>
-          </td>
-          <td class="cuenta__column">
-            <span class={`badge badge--${cuenta.nature.label}`}>
-              {cuenta.nature.label}
-            </span>
-          </td>
-          <td class="cuenta__column cuenta__amount">
-            ${cuenta.balance.toFixed(2)}
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</article>
-
-<style>
-  .cuentas {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .cuentas__tabla {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-  }
-
-  .cuentas__caption {
-    font-size: 1.2rem;
-    font-weight: 600;
-    letter-spacing: 0.025em;
-    padding: 0.5rem 1rem;
-    border-bottom: 1px solid #374151;
-    margin-bottom: 0.5rem;
-  }
-
-  .screen_reader_only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  .cuentas__header {
-    background: #181b20;
-    /* #1d1f21 */
-  }
-
-  .cuentas__title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-align: center;
-    text-transform: uppercase;
-    padding: 0.7rem 0.75rem;
-  }
-
-  .cuentas_tabla__body {
-    background: #111827;
-  }
-
-  .cuenta__fila {
-    transition: background-color 0.2s ease;
-  }
-
-  .cuenta__fila:hover {
-    background-color: #1f2937;
-  }
-
-  .cuenta__column {
-    padding: 0.5rem 1.5rem;
-    border-bottom: 1px solid #374151;
-    text-align: left;
-  }
-
-  .cuenta__fila:last-child .cuenta__column {
-    border-bottom: none;
-  }
-
-  .cuenta__nombre {
-    font-weight: 500;
-    color: #f3f4f6;
-  }
-
   .badge {
     display: inline-block;
     padding: 0.2rem 0.6rem;
