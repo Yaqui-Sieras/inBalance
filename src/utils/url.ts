@@ -37,9 +37,13 @@ export function isExternalUrl(url: string): boolean {
 }
 
 /**
- * Helper para construir URLs absolutas para repositorios externos o rutas locales de desarrollo.
- * @param path Ruta relativa, ej: "proyectos/"
- * @param useAbsolute Si es true genera la URL completa.
+ * Construye la URL final de un enlace respetando el `base` configurado.
+ * - URLs externas (http/https, mailto, tel): se devuelven sin cambios.
+ * - Anclajes (#seccion): se devuelven sin cambios.
+ * - Rutas internas: se les antepone el `base` y la barra final de `trailingSlash: 'always'`.
+ * @param path Ruta relativa ("cuentas", "/cuentas/detalle/") o URL completa.
+ * @param options.useAbsolute Si es true y hay `site`, antepone el origen (útil para canonicals).
+ *   Sin `site` devuelve la ruta relativa.
  */
 export function buildUrl(path: string, options: BuildUrlOptions = {}): string {
   if (path.startsWith('#')) return path;
