@@ -1,0 +1,17 @@
+---
+// @pages/index.astro
+import PublicLayout from '@layouts/PublicLayout.astro';
+
+const titlePage = 'InBalance | Dashboard';
+const description = 'Panel de control principal de inBalance.';
+---
+
+<PublicLayout titlePage={titlePage} description={description}>
+  <h2 class={'Inicio__title_provisional'}>Inicio</h2>
+</PublicLayout>
+
+<style>
+  .Inicio__title_provisional {
+    text-align: center;
+  }
+</style>
