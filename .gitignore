@@ -7,7 +7,7 @@ dist/
 node_modules/
 
 # docs extras
-docs/
+docs/private/
 
 # logs
 npm-debug.log*
