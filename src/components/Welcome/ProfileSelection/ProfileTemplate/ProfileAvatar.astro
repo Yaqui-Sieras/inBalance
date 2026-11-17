@@ -1,0 +1,44 @@
+---
+// @components/Welcome/ProfileSelection/ProfileTemplate/ProfileAvatar.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import Box from '@components/UI/Common/Box.astro';
+
+interface Props extends HTMLAttributes<'span'> {
+  style?: Properties;
+}
+
+const {
+  id: idName = '',
+  class: className = '',
+  style: userStyle,
+} = Astro.props;
+---
+
+<Box class={'profile_avatar__container'}>
+  <span
+    id={idName}
+    class:list={['profile_avatar', className]}
+    style={{
+      ...(typeof userStyle === 'object' ? userStyle : {}),
+    }}
+  >
+    <slot>👤</slot>
+  </span>
+</Box>
+
+<style>
+  .profile_avatar__container {
+    width: 2.25rem;
+    height: 2.25rem;
+    background-color: #151517;
+    padding: 0.2rem;
+    border-radius: 0.3rem;
+  }
+
+  .profile_avatar {
+    text-align: center;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+  }
+</style>

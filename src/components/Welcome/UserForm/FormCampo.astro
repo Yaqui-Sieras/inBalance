@@ -1,0 +1,102 @@
+---
+// @components/welcome/UserForm/FormCampo.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import Box from '@components/UI/Common/Box.astro';
+import Label from '@components/UI/Common/Label.astro';
+import Input from '@components/UI/Common/Input.astro';
+import Button from '@components/UI/Common/Button.astro';
+
+interface Props extends HTMLAttributes<'input'> {
+  // Props exclusivas para el contenedor o lógica visual extra
+  containerID?: string;
+  error?: string;
+  style?: Properties;
+
+  // Props exclusivas para el label o lógica visual extra
+  labelID?: string;
+  textLabel?: string;
+  labelStyle?: Properties;
+  labelClass?: string;
+
+  // Props exclusivas para el input o lógica visual extra
+  inputStyle?: Properties;
+  inputClass?: string;
+}
+
+const {
+  containerID = '',
+  error,
+  class: className = '',
+  style: userStyle,
+
+  labelID = '',
+  textLabel = '',
+  labelClass = '',
+  labelStyle,
+
+  id: idName = '',
+  inputClass = '',
+  inputStyle,
+  type,
+
+  ...rest // <--- Captura automáticamente type, placeholder, required, minlength, value, etc.
+} = Astro.props;
+
+const isPassword = type === 'password' ? true : false;
+---
+
+<Box
+  id={containerID}
+  class:list={['form_campo', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+  }}
+>
+  {textLabel && (
+    <Label
+      id={labelID}
+      forId={idName}
+      text={textLabel}
+      class={labelClass}
+      style={{ ...(typeof labelStyle === 'object' ? labelStyle : {}) }}
+    />
+  )}
+  <Box class:list={[{ form_campo__password: isPassword }]}>
+    <Input
+      id={idName}
+      class:list={[{ 'has-error': error }, inputClass]}
+      style={{ ...(typeof inputStyle === 'object' ? inputStyle : {}) }}
+      aria-invalid={!!error}
+      type={type}
+      {...rest}
+    />
+
+    {isPassword && <Button>Mostrar</Button>}
+  </Box>
+
+  {error && <span class="form_campo__error_msg">{error}</span>}
+</Box>
+
+<style>
+  .form_campo {
+    flex-direction: column;
+    align-items: start;
+    gap: 0.35rem;
+  }
+
+  .form_campo__password {
+    gap: 0.5rem;
+  }
+
+  /* Estado de error opcional */
+  .has-error {
+    border-color: #ef4444;
+  }
+
+  .form_campo__error_msg {
+    font-size: 0.8rem;
+    color: #ef4444;
+    font-weight: 500;
+  }
+</style>

@@ -1,0 +1,53 @@
+---
+// @components/Welcome/ProfileSelection/NotProfilePlaceholder.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import Box from '@components/UI/Common/Box.astro';
+
+interface Props extends HTMLAttributes<'div'> {
+  style?: Properties;
+}
+
+const {
+  id: idName = '',
+  class: className = '',
+  style: userStyle,
+} = Astro.props;
+---
+
+<Box
+  id={idName}
+  class:list={['not_profile', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+  }}
+>
+  <h2 class="not_profile__title">
+    No se detectaron usuarios en este dispositivo.
+  </h2>
+  <h3 class="not_profile__subtitle">
+    <span>Comienza creando tu perfil</span>
+    <span> o </span>
+    <span>Restaura un respaldo previo.</span>
+  </h3>
+</Box>
+
+<style>
+  .not_profile {
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  .not_profile__title {
+    font-size: 1.1rem;
+    color: #b4b4b7;
+  }
+
+  .not_profile__subtitle {
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+</style>

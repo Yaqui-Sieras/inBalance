@@ -1,0 +1,83 @@
+---
+// @components/Welcome/LoadingView.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import Box from '@components/UI/Common/Box.astro';
+
+import LoadingPlaceholder from '@components/Welcome/ProfileSelection/LoadingPlaceholder.astro';
+import NotProfilePlaceholder from '@components/Welcome/ProfileSelection/NotProfilePlaceholder.astro';
+import ProfileListPlaceholder from '@components/Welcome/ProfileSelection/ProfileListPlaceholder.astro';
+
+interface Props extends HTMLAttributes<'div'> {
+  style?: Properties;
+}
+
+const {
+  id: idName = '',
+  class: className = '',
+  style: userStyle,
+} = Astro.props;
+---
+
+<Box
+  id={idName}
+  class:list={['profile_selection', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+  }}
+>
+  <header class="profile_selection__header">
+    <h2 class="header__title">Perfiles del dispositivo</h2>
+    <h3 class="header__subtitle">Elige qué perfil operará en esta sesión.</h3>
+  </header>
+
+  <Box class="profile_selection__contend">
+    <LoadingPlaceholder
+      id="loading-placeholder"
+      text="Buscando perfiles en este dispositivo ..."
+    />
+
+    <NotProfilePlaceholder
+      id="not-profile-placeholder"
+      style={{ display: 'none' }}
+    />
+
+    <ProfileListPlaceholder
+      id="profile-list-container"
+      style={{ display: 'none' }}
+    />
+  </Box>
+</Box>
+
+<style>
+  .profile_selection {
+    flex: 1;
+    flex-direction: column;
+    justify-content: start;
+    gap: 0.8rem;
+  }
+
+  .profile_selection__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .header__subtitle {
+    font-size: 1rem;
+    color: #b1b1ba;
+  }
+
+  .profile_selection__contend {
+    background-color: #18181a;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.5rem;
+    flex: 1;
+    flex-direction: column;
+  }
+</style>

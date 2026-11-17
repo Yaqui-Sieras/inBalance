@@ -1,0 +1,36 @@
+---
+// @components/Welcome/ProfileSelection/ProfileListPlaceholder.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import Box from '@components/UI/Common/Box.astro';
+import ProfileTemplate from '@components/Welcome/ProfileSelection/ProfileTemplate.astro';
+
+interface Props extends HTMLAttributes<'div'> {
+  style?: Properties;
+}
+
+const {
+  id: idName = '',
+  class: className = '',
+  style: userStyle,
+} = Astro.props;
+---
+
+<Box
+  id={idName}
+  class:list={['profile_list', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+  }}
+>
+  <ProfileTemplate id="profile-template" />
+</Box>
+
+<style>
+  .profile_list {
+    flex: 1;
+    flex-direction: column;
+    justify-content: start;
+    gap: 0.5rem;
+  }
+</style>

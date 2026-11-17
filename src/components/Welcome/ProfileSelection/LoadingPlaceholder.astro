@@ -1,0 +1,60 @@
+---
+// @components/Welcome/ProfileSelection/LoadingPlaceholder.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import Box from '@components/UI/Common/Box.astro';
+
+interface Props extends HTMLAttributes<'div'> {
+  text?: string;
+  style?: Properties;
+}
+
+const {
+  id: idName = '',
+  class: className = '',
+  text = 'Cargando ...',
+  style: userStyle,
+} = Astro.props;
+---
+
+<Box
+  id={idName}
+  class:list={['loading_placeholder', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+  }}
+>
+  <span class="loading__spinner" aria-hidden="true"></span>
+  <p class="loading__text">{text}</p>
+</Box>
+
+<style>
+  .loading_placeholder {
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .loading__spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 0.4rem solid #3f3f46;
+    border-top-color: #2563eb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loading__text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: #cfcfd0;
+  }
+</style>

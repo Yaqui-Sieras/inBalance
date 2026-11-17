@@ -1,0 +1,123 @@
+---
+// @components/welcome/UserForm/LoginForm.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+// UI Common component
+import Box from '@components/UI/Common/Box.astro';
+import Button from '@components/UI/Common/Button.astro';
+// Rest Component
+import FormCampo from '@components/Welcome/UserForm/FormCampo.astro';
+import ProfileAvatar from '@components/Welcome/ProfileSelection/ProfileTemplate/ProfileAvatar.astro';
+import ProfileName from '@components/Welcome/ProfileSelection/ProfileTemplate/ProfileName.astro';
+
+interface Props extends HTMLAttributes<'div'> {
+  style?: Properties;
+}
+
+const {
+  id: idName = '',
+  class: className = '',
+  style: userStyle,
+} = Astro.props;
+---
+
+<Box
+  id={idName}
+  class:list={['user_login', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+  }}
+>
+  <Box as="header" style={{ flexDirection: 'column' }}>
+    <h2 class="header__title">Iniciar Sesión</h2>
+    <h3 class="header__subtitle">Ingrese su contraseña.</h3>
+  </Box>
+
+  <form class="user_login__form">
+    <Box class={'form__conteiner_campos'}>
+      <Box class={'form__campos'}>
+        <Box class={'dataProfile'}>
+          <ProfileAvatar id={'login-profile-avatar'} />
+          <ProfileName id={'login-profile-name'} />
+        </Box>
+
+        <FormCampo
+          id="user-pass-login"
+          textLabel="Contraseña"
+          type={'password'}
+          placeholder={'Contraseña Segura'}
+          required={true}
+          minlength={8}
+          maxlength={32}
+        />
+      </Box>
+    </Box>
+
+    <Box class={'form__actions'}>
+      <Button type="submit" style={{ flex: '1' }}>
+        Entrar
+      </Button>
+
+      <Button type="reset" id="btn-cancelar-login" variant="ghost">
+        Cancelar
+      </Button>
+    </Box>
+  </form>
+</Box>
+
+<style>
+  .header__title {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .header__subtitle {
+    font-size: 1rem;
+    color: #b1b1ba;
+  }
+
+  .user_login {
+    flex: 1;
+    flex-direction: column;
+    justify-content: start;
+    gap: 0.8rem;
+  }
+
+  .user_login__form {
+    width: 100%;
+    text-align: left;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+
+  .form__conteiner_campos {
+    background-color: #18181a;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.5rem;
+    flex: 1;
+    flex-direction: column;
+    justify-content: start;
+  }
+
+  .form__campos {
+    background: #27272a;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.5rem;
+    flex-direction: column;
+    justify-content: start;
+    gap: 0.5rem;
+  }
+
+  .dataProfile {
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  .form__actions {
+    gap: 0.5rem;
+  }
+</style>

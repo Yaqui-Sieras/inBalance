@@ -1,0 +1,38 @@
+---
+// @components/Welcome/ProfileSelection/ProfileListPlaceholder.astro
+import Box from '@components/UI/Common/Box.astro';
+import ProfileAvatar from '@components/Welcome/ProfileSelection/ProfileTemplate/ProfileAvatar.astro';
+import ProfileName from '@components/Welcome/ProfileSelection/ProfileTemplate/ProfileName.astro';
+interface Props {
+  id: string;
+}
+
+const { id: idName = '' } = Astro.props;
+---
+
+<template id={idName}>
+  <Box class={'profile'}>
+    <ProfileAvatar />
+    <ProfileName />
+  </Box>
+</template>
+
+<style>
+  .profile {
+    cursor: pointer;
+    width: 100%;
+    background: #27272a;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid transparent;
+    border-radius: 0.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #3f3f46;
+    }
+  }
+</style>
