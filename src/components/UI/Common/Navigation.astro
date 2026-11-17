@@ -3,7 +3,7 @@
 import type { HTMLAttributes } from 'astro/types';
 import type { Properties } from 'csstype';
 import type { StyleProps } from '@types-local/commonUI';
-import { getCssVariables } from '@utils/commonUIUtils';
+
 import type { NavItem } from '@types-local/routes';
 import Link from '@components/UI/Common/Link.astro';
 
@@ -11,51 +11,47 @@ interface Props extends HTMLAttributes<'nav'> {
   links: readonly NavItem[];
   ariaLabel?: string;
   // Relacionado con el contenedor
-  navBaseCSS?: StyleProps;
+  navClass?: Properties;
   navStyle?: Properties;
   style?: Properties;
   // Relacionado con los estilos configurables de los links
-  linkBaseCSS?: StyleProps;
-  linkCurrentCSS?: StyleProps;
-  linkHoverCSS?: StyleProps;
-  linkFocusCSS?: StyleProps;
-  linkActiveCSS?: StyleProps;
-  linkDisabledCSS?: StyleProps;
+
   linkClass?: string;
   linkStyle?: Properties;
+  linkCurrentClass?: string;
+  linkCurrentStyle?: StyleProps;
 }
 
 const {
   links,
   ariaLabel = 'Navegación',
-  navBaseCSS = {},
+  navClass,
+  class: className = '',
   navStyle,
   style: userStyle,
-  linkBaseCSS,
-  linkCurrentCSS,
-  linkHoverCSS,
-  linkFocusCSS,
-  linkActiveCSS,
-  linkDisabledCSS,
   linkClass = '',
-  class: className = '',
   linkStyle,
+  linkCurrentClass,
+  linkCurrentStyle,
   ...rest
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
 ---
 
-<nav aria-label={ariaLabel} class:list={['navigation', className]} {...rest}>
+<nav
+  aria-label={ariaLabel}
+  class:list={['navigation', navClass, className]}
+  {...rest}
+>
   <ul
     class="nav_list"
     style={{
       ...(typeof navStyle === 'object' ? navStyle : {}),
       ...(typeof userStyle === 'object' ? userStyle : {}),
-      ...getCssVariables('nav', navBaseCSS),
     }}
   >
-    {links.map(({ label, href, target, icon }) => {
+    {links.map(({ label, href, target, icon }: NavItem) => {
       const isExternal = href.startsWith('https://');
       const targetPathname = isExternal ? new URL(href).pathname : href;
 
@@ -64,27 +60,12 @@ const currentPath = Astro.url.pathname;
           ? currentPath === '/'
           : currentPath.startsWith(targetPathname);
 
-      const baseStyles: StyleProps = {
-        fontWeight: '600',
-        fontSize: '1rem',
-        letterSpacing: '0.05em',
-        padding: '0.5rem 0.75rem',
-        borderBottom: '5px solid transparent',
-        ...linkBaseCSS,
-        ...(isCurrent && linkCurrentCSS ? linkCurrentCSS : {}),
-      };
-
       return (
         <li class="nav_item">
           <Link
             href={href}
             target={target}
-            baseCSS={{ ...baseStyles }}
-            hoverCSS={{ ...linkHoverCSS }}
-            focusCSS={{ ...linkFocusCSS }}
-            activeCSS={{ ...linkActiveCSS }}
-            disabledCSS={{ ...linkDisabledCSS }}
-            class:list={[linkClass]}
+            class:list={['item_a', linkClass, { linkCurrentClass: isCurrent }]}
             style={{ ...linkStyle }}
           >
             {label == '' && icon}
@@ -101,26 +82,25 @@ const currentPath = Astro.url.pathname;
     height: inherit;
     display: flex;
     align-items: center;
-    background: var(--nav-background, transparent);
-    padding: var(--nav-padding, 0);
-    gap: var(--nav-gap, 0);
   }
 
   .nav_list {
     list-style: none;
     height: inherit;
-    margin: 0;
-    padding: 0;
     display: flex;
-    flex-direction: var(--nav-flex-direction, row);
-    align-items: var(--nav-align-items, center);
-    justify-content: var(--nav-justify-content, center);
-    gap: var(--nav-gap, 0);
+    align-items: center;
+    justify-content: center;
   }
 
   .nav_item {
     height: inherit;
     display: flex;
     align-items: center;
+  }
+
+  .item_a {
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 5px solid transparent;
   }
 </style>

@@ -1,37 +1,53 @@
 ---
 // @components/UI/Common/Text.astro
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLTag, Polymorphic } from 'astro/types';
 import type { Properties } from 'csstype';
-import type { StyleProps } from '@types-local/commonUI';
-import { getCssVariables } from '@utils/commonUIUtils';
 
-// Definimos las etiquetas HTML permitidas para tipografía
+// Categorización semántica de etiquetas tipográficas y de formato en línea
 type TextTag =
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'h4'
-  | 'h5'
-  | 'h6'
-  | 'p'
-  | 'span'
-  | 'strong'
-  | 'em'
-  | 'label';
+  // --- Bloques de texto principales ---
+  | 'p' // Párrafo estándar para bloques de texto continuo
 
-interface Props extends HTMLAttributes<'p'> {
+  // --- Enlineado genérico y énfasis ---
+  | 'span' // Contenedor genérico en línea (para aplicar clases o estilos)
+  | 'strong' // Texto con importancia o urgencia semántica (negrita semántica)
+  | 'b' // Texto en negrita por motivos de formato (sin peso semántico de importancia)
+  | 'em' // Texto con énfasis semántico (cursiva semántica)
+  | 'i' // Texto en cursiva por estilo (términos técnicos, frases en otro idioma)
+
+  // --- Modificadores de tamaño y tono ---
+  | 'small' // Texto secundario, notas al pie, avisos legales o de copyright
+  | 'mark' // Texto resaltado (equivale a usar un marcador visual)
+
+  // --- Posicionamiento técnico y numérico ---
+  | 'sub' // Subíndice (ej. variables matemáticas, fórmulas H₂O)
+  | 'sup' // Superíndice (ej. exponentes 10², llamadas a notas al pie ¹)
+
+  // --- Contenido técnico, código e interfaz ---
+  | 'code' // Fragmento de código informático o monospaciado
+  | 'kbd' // Entrada de teclado o atajo que debe presionar el usuario (ej. Ctrl + C)
+
+  // --- Semántica de tiempo, referencias y citas ---
+  | 'time' // Fechas y horas formateadas de manera legible por máquinas (ej. ISO/HTML5)
+  | 'cite' // Título de una obra, libro, documento o referencia citada
+  | 'abbr' // Abrev. o acrónimo (útil con el atributo title="..." para la descripción)
+  | 'q' // Cita corta en línea (el navegador suele agregarle comillas)
+
+  // --- Revisiones, cambios y correcciones visuales ---
+  | 'del' // Texto eliminado/borrado en una revisión o actualización
+  | 'ins' // Texto insertado/añadido en una revisión
+  | 's'; // Texto tachado (contenido que ya no es preciso o relevante, ej. precios viejos)
+
+type Props<Tag extends HTMLTag = 'p'> = Polymorphic<{ as: Tag }> & {
   as?: TextTag;
-  variant?: 'display' | 'title' | 'body' | 'caption' | 'subtle';
-  baseCSS?: StyleProps;
-  hoverCSS?: StyleProps;
+  variant?: 'body' | 'caption' | 'subtle' | 'code';
   style?: Properties;
-}
+};
 
 const {
   as: Tag = 'p',
+  id: idName = '',
   variant = 'body',
-  baseCSS = {},
-  hoverCSS = {},
   class: className = '',
   style: userStyle,
   ...rest
@@ -39,12 +55,10 @@ const {
 ---
 
 <Tag
+  id={idName}
   class:list={['ui_text', `ui_text--${variant}`, className]}
   style={{
     ...(typeof userStyle === 'object' ? userStyle : {}),
-    // Inyectamos las variables del objeto baseCSS y hoverCSS
-    ...getCssVariables('base', baseCSS),
-    ...getCssVariables('hover', hoverCSS),
   }}
   {...rest}
 >
@@ -53,47 +67,32 @@ const {
 
 <style>
   .ui_text {
-    margin: 0;
-    font-family: var(--base-font-family, inherit);
-    font-weight: var(--base-font-weight, inherit);
-    font-size: var(--base-font-size, inherit);
-    color: var(--base-color, inherit);
-    text-decoration: var(--base-text-decoration, none);
+    font-weight: 400;
+    line-height: 1.5;
     transition: all 0.2s ease;
-
-    &:hover {
-      color: var(--hover-color, var(--base-color, inherit));
-      font-weight: var(--hover-font-weight, var(--base-font-weight, inherit));
-    }
   }
 
   /* Variantes tipográficas base de tu design system */
-  .ui_text--display {
-    font-size: var(--base-font-size, 3rem);
-    font-weight: var(--base-font-weight, 800);
-    line-height: var(--base-line-height, 1.1);
-  }
-
-  .ui_text--title {
-    font-size: var(--base-font-size, 1.75rem);
-    font-weight: var(--base-font-weight, 700);
-    line-height: var(--base-line-height, 1.2);
-  }
-
   .ui_text--body {
-    font-size: var(--base-font-size, 1rem);
-    font-weight: var(--base-font-weight, 400);
-    line-height: var(--base-line-height, 1.5);
+    font-size: 1rem;
   }
 
   .ui_text--caption {
-    font-size: var(--base-font-size, 0.875rem);
-    font-weight: var(--base-font-weight, 400);
-    line-height: var(--base-line-height, 1.4);
+    font-size: 0.875rem;
+    line-height: 1.4;
   }
 
   .ui_text--subtle {
-    font-size: var(--base-font-size, 0.875rem);
-    color: var(--base-color, #a3a3a3);
+    font-size: 0.875rem;
+    color: #a1a1aa;
+    /* color: #a3a3a3; */
+  }
+
+  .ui_text--code {
+    font-family: monospace;
+    background: #27272a;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
   }
 </style>

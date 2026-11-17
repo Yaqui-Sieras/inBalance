@@ -1,21 +1,5 @@
 ---
 // @components/Home/PanelContable/LibroDiario.astro
-import type { LibroMayor } from '@/lib/LibroMayor';
-import type { Account, Transaction } from '@types-local/contabilidad';
-import AsientoItem from '@/components/Transacciones/LibroDiario/AsientoItem.astro';
-
-interface Props {
-  libroMayor: LibroMayor;
-}
-
-const { libroMayor } = Astro.props;
-
-// Obtenemos los datos
-const cuentas = libroMayor.getAccounts();
-const transacciones = libroMayor.getTransactions();
-const { totalDebit, totalCredit, imbalance } = libroMayor.getTrialBalance();
-
-const hasTransactions = transacciones.length > 0;
 ---
 
 <article class="libro_diario">
@@ -34,55 +18,34 @@ const hasTransactions = transacciones.length > 0;
         <th class="header__title">CRÉDITO (HABER)</th>
       </tr>
     </thead>
-    {hasTransactions ? (
-      transacciones.map((tx) => (
-        <AsientoItem transaccion={tx} cuentas={cuentas} />
-      ))
-    ) : (
-      <tbody class="asientos__body">
-        <tr class="body__fila">
-          <td colspan="3" class="body__column">
-            <p class="body__empty">No hay transacciones registradas.</p>
-          </td>
-        </tr>
-      </tbody>
-    )}
+
+    <tbody class="asientos__body" id="libro_diario_asientos">
+      <tr class="body__fila">
+        <td colspan="3" class="body__column">
+          <p class="body__empty">Cargando transacciones...</p>
+        </td>
+      </tr>
+    </tbody>
 
     <tfoot class="asientos__footer">
       <tr class="footer__fila">
         <td class="footer__column">Total</td>
-        <td
-          class:list={[
-            'footer__column',
-            hasTransactions ? 'footer__amounts' : 'footer__empty',
-          ]}
-        >
-          <span class="footer__span">
-            {hasTransactions ? `$${totalDebit.toFixed(2)}` : '-'}
+        <td class:list={['footer__column', 'footer__empty']}>
+          <span class="footer__span" id="total_debit">
+            {'-'}
           </span>
         </td>
-        <td
-          class:list={[
-            'footer__column',
-            hasTransactions ? 'footer__amounts' : 'footer__empty',
-          ]}
-        >
-          <span class="footer__span">
-            {hasTransactions ? `$${totalCredit.toFixed(2)}` : '-'}
+        <td class:list={['footer__column', 'footer__empty']}>
+          <span class="footer__span" id="total_credit">
+            {'-'}
           </span>
         </td>
       </tr>
       <tr class="footer__fila">
         <td class="footer__column">Desbalance</td>
-        <td
-          colspan="2"
-          class:list={[
-            'footer__column',
-            hasTransactions ? 'footer__desbalance' : 'footer__empty',
-          ]}
-        >
-          <span class="footer__span">
-            {hasTransactions ? `$${imbalance.toFixed(2)}` : '-'}
+        <td colspan="2" class:list={['footer__column', 'footer__empty']}>
+          <span class="footer__span" id="total_imbalance">
+            {'-'}
           </span>
         </td>
       </tr>

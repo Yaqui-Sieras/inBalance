@@ -1,0 +1,39 @@
+---
+// @components/Welcome/ProfileSelection/ProfileTemplate/ProfileName.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import Box from '@components/UI/Common/Box.astro';
+
+interface Props extends HTMLAttributes<'span'> {
+  style?: Properties;
+}
+
+const {
+  id: idName = '',
+  class: className = '',
+  style: userStyle,
+} = Astro.props;
+---
+
+<Box class={'profile_name__container'}>
+  <span
+    id={idName}
+    class:list={['profile_name', className]}
+    style={{
+      ...(typeof userStyle === 'object' ? userStyle : {}),
+    }}
+  >
+    <slot>Example Name</slot>
+  </span>
+</Box>
+
+<style>
+  .profile_name__container {
+    justify-content: start;
+    flex: 1;
+  }
+
+  .profile_name {
+    font-weight: 500;
+  }
+</style>

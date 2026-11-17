@@ -1,0 +1,41 @@
+---
+// @components/UI/Common/Label.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+
+interface Props extends HTMLAttributes<'label'> {
+  forId?: string | null;
+  text?: string;
+  style?: Properties;
+}
+
+const {
+  id: idName = '',
+  forId,
+  text,
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+---
+
+<label
+  id={idName}
+  for={forId}
+  class:list={['ui_label', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+  }}
+  {...rest}
+>
+  {text ? text : <slot />}
+</label>
+
+<style>
+  .ui_label {
+    text-align: left;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #a1a1aa;
+  }
+</style>

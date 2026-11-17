@@ -2,13 +2,13 @@
 
 export type a_target = '_self' | '_blank' | '_parent' | '_top' | '_unfencedTop';
 
-export type RouteConfigItem = {
+export interface RouteConfigItem {
   label: string;
   path: string;
-  icon?: string;
-  target?: a_target;
+  target: a_target;
+  icon: string;
   showInNav: boolean;
-};
+}
 
 export interface NavItem {
   label: string;

@@ -1,92 +1,59 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import path from 'node:path';
-import node from '@astrojs/node';
 
-// Extracción limpia de datos del repositorio de GitHub Pages
-const ghRepository = process.env.GITHUB_REPOSITORY;
-const [ghOwner, ghRepoName] = ghRepository ? ghRepository.split('/') : [];
-
-// Flags de entorno unificados para todas las plataformas CI/CD soportadas
-const isDev = process.env.NODE_ENV === 'development';
-const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
-const isVercel = process.env.VERCEL === '1';
-const isNetlify = process.env.NETLIFY === 'true';
-const isCloudflare = process.env.CF_PAGES === '1';
+const env = process.env;
 
 /**
- * Determina dinámicamente la URL raíz (`site`) según la plataforma de despliegue activa.
- * @returns {string | undefined} URL absoluta del sitio o `undefined` en entorno de desarrollo.
+ * Un detector por plataforma. Devuelve { site, base } si está activa, o null si no.
+ * Para soportar otra plataforma, se agrega un detector a la lista.
  */
-const getDeploymentSite = () => {
-  // 1. Desarrollo local
-  if (isDev) return;
+const detectors = [
+  // GitHub Pages
+  () => {
+    if (env.GITHUB_ACTIONS !== 'true' || !env.GITHUB_REPOSITORY) return null;
+    const [owner, repo] = env.GITHUB_REPOSITORY.split('/');
+    if (!owner || !repo) return null;
+    const isUserPage =
+      repo.toLowerCase() === `${owner}.github.io`.toLowerCase();
+    return {
+      site: `https://${owner.toLowerCase()}.github.io`,
+      base: isUserPage ? '/' : `/${repo}/`,
+    };
+  },
 
-  // 2. GitHub Pages
-  if (isGitHubActions && ghOwner) {
-    return `https://${ghOwner}.github.io`;
-  }
+  // Vercel
+  () =>
+    env.VERCEL === '1' && env.VERCEL_PROJECT_PRODUCTION_URL
+      ? { site: `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`, base: '/' }
+      : null,
 
-  // 3. Vercel
-  if (isVercel && process.env.VERCEL_PROJECT_PRODUCTION_URL) {
-    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
-  }
+  // Netlify
+  () =>
+    env.NETLIFY === 'true' && env.URL ? { site: env.URL, base: '/' } : null,
 
-  // 4. Netlify
-  if (isNetlify && process.env.URL) {
-    return process.env.URL;
-  }
+  // Cloudflare Pages
+  () =>
+    env.CF_PAGES === '1' && env.CF_PAGES_URL
+      ? { site: env.CF_PAGES_URL, base: '/' }
+      : null,
+];
 
-  // 5. Cloudflare Pages
-  if (isCloudflare && process.env.CF_PAGES_URL) {
-    return process.env.CF_PAGES_URL;
-  }
+const detected = detectors.map((detect) => detect()).find(Boolean);
 
-  // Fallback para compilaciones de producción ejecutadas localmente
-  const folderName = path.basename(process.cwd());
-  const filtroGhPage = '.github.io';
-  const lgFiltro = filtroGhPage.length;
-
-  const siteName = folderName.endsWith('.github.io')
-    ? folderName.slice(0, -lgFiltro)
-    : folderName;
-
-  return `https://${siteName}.vercel.app`;
-};
-
-/**
- * Determina la ruta base (`base`) de la aplicación.
- * Asigna una subcarpeta dinámicamente en repositorios secundarios de GitHub Pages (`/nombre-repo/`)
- * y la raíz (`/`) en User Pages (.github.io) o en el resto de plataformas.
- * @returns {string} Ruta base normalizada.
- */
-const getDeploymentBase = () => {
-  if (isGitHubActions && ghRepoName) {
-    const userPageRepo = `${ghOwner}.github.io`.toLowerCase();
-
-    if (ghRepoName.toLowerCase() === userPageRepo) {
-      return '/';
-    }
-
-    return `/${ghRepoName}/`;
-  }
-
-  return '/';
-};
+// Prioridad: variables manuales > plataforma detectada > valores locales
+const site = env.SITE_URL ?? detected?.site; // undefined en local
+const base = env.BASE_PATH ?? detected?.base ?? '/';
 
 // https://astro.build/config
 export default defineConfig({
   // URL absoluta dinámica según el proveedor de hosting
-  site: getDeploymentSite(),
+  site: site,
 
   // Ruta base adaptativa para GitHub Pages o raíz del dominio
-  base: getDeploymentBase(),
+  base: base,
 
   trailingSlash: 'always',
-  integrations: [sitemap()],
-
-  adapter: node({
-    mode: 'standalone',
-  }),
+  // El sitemap necesita `site`; en un build local sin plataforma se omite.
+  integrations: site ? [sitemap()] : [],
 });

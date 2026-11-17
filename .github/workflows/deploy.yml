@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["principal"] # Se activa cuando subes cambios a main / principal / nombre-rama-principal
+    branches: ['principal'] # Se activa cuando subes cambios a main / principal / nombre-rama-principal
 
   workflow_dispatch:
 
@@ -12,8 +12,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  group: 'pages'
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -23,29 +23,30 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 11
+        uses: pnpm/action-setup@v4
 
       - name: Setup Node.js con caché
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           cache: pnpm # ⚡ Acelera las futuras instalaciones
 
       - name: Setup Pages # 🔧 Configura rutas base automáticamente
         uses: actions/configure-pages@v4
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
+
+      - name: Tipos
+        run: pnpm check
 
       - name: Build project
-        run: pnpm run build
+        run: pnpm build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "./dist"
+          path: './dist'
 
   deploy:
     environment:

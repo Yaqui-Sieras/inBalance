@@ -1,162 +1,78 @@
-// @lib/ledgerManager.ts
+// @lib/LedgerManager.ts
+import { IndexedDBRepository } from '@repositories/IndexedDBRepository';
 import type { RepositorioContable } from '@repositories/RepositorioContable';
-import { MemoryRepository } from '@repositories/MemoryRepository';
 import type { Account, Transaction } from '@types-local/contabilidad';
 
-class LedgerManager {
-  private repo: RepositorioContable;
-  private accounts: Map<string, Account> = new Map();
+export class LedgerManager {
+  private repository: RepositorioContable;
+  private loaded: boolean = false;
+
+  // Estados en memoria
+  private users: any[] = [];
+  private books: any[] = [];
+  private bookMembers: any[] = [];
+  private accounts: Account[] = [];
   private transactions: Transaction[] = [];
 
-  constructor(repo: RepositorioContable = new MemoryRepository()) {
-    this.repo = repo;
+  constructor(repository: RepositorioContable = new IndexedDBRepository()) {
+    this.repository = repository;
   }
 
-  // Carga inicial de datos desde el repositorio
-  async load(): Promise<void> {
-    const cuentasList = await this.repo.getAccounts();
-    const transaccionesList = await this.repo.getTransactions();
+  /**
+   * Carga inicial de todos los datos desde IndexedDB a la memoria del motor
+   */
+  async ensureLoaded(): Promise<void> {
+    if (this.loaded) return;
 
-    this.accounts.clear();
-    for (const cuenta of cuentasList) {
-      this.accounts.set(cuenta.id, cuenta);
-    }
+    try {
+      this.users = await this.repository.getUsers();
+      this.books = await this.repository.getBooks();
+      this.bookMembers = await this.repository.getBookMembers();
+      this.accounts = await this.repository.getAccounts();
+      this.transactions = await this.repository.getTransactions();
 
-    this.transactions = [...transaccionesList];
-    this.recalculateAndSaveBalances();
-  }
-
-  // Agregar una cuenta nueva al sistema
-  async addAccount(
-    accountData: Omit<Account, 'id' | 'balance'>,
-  ): Promise<string> {
-    const { name, nature } = accountData;
-
-    if (!name || typeof name !== 'string' || name.trim() === '') {
-      throw new Error('El nombre de la cuenta es obligatorio.');
-    }
-    if (!nature || !nature.label || !nature.group || !nature.behavior) {
-      throw new Error('La naturaleza contable de la cuenta es inválida.');
-    }
-
-    const id = crypto.randomUUID();
-
-    const newAccount: Account = {
-      id,
-      name: name.trim(),
-      nature,
-      balance: 0,
-    };
-
-    this.accounts.set(id, newAccount);
-    await this.repo.saveAccount(newAccount);
-    return id;
-  }
-
-  // Registrar un asiento contable validando la partida doble
-  async addTransaction(txData: Omit<Transaction, 'id'>): Promise<boolean> {
-    const { date, description, lines } = txData;
-
-    if (!date || !description || typeof description !== 'string') {
-      throw new Error(
-        'La fecha y la descripción de la transacción son obligatorias.',
+      this.loaded = true;
+      console.log(
+        '[LedgerManager] Datos cargados correctamente desde IndexedDB.',
       );
-    }
-
-    if (!lines || !Array.isArray(lines) || lines.length < 2) {
-      throw new Error(
-        'Un asiento contable debe tener al menos dos líneas (partida doble).',
-      );
-    }
-
-    let totalDebitos = 0;
-    let totalCreditos = 0;
-
-    for (const line of lines) {
-      if (!this.accounts.has(line.accountId)) {
-        throw new Error(
-          `La cuenta con ID "${line.accountId}" no existe en el sistema.`,
-        );
-      }
-
-      if (typeof line.amount !== 'number' || line.amount <= 0) {
-        throw new Error(
-          'El monto de cada línea debe ser un número positivo mayor a cero.',
-        );
-      }
-
-      if (line.direction !== 'debito' && line.direction !== 'credito') {
-        throw new Error(
-          'La dirección del movimiento debe ser estrictamente "debito" o "credito".',
-        );
-      }
-
-      if (line.direction === 'debito') {
-        totalDebitos += line.amount;
-      } else {
-        totalCreditos += line.amount;
-      }
-    }
-
-    if (Math.abs(totalDebitos - totalCreditos) > 0.001) {
-      throw new Error(
-        `Asiento desbalanceado. Los débitos (${totalDebitos}) deben ser iguales a los créditos (${totalCreditos}).`,
-      );
-    }
-
-    const id = crypto.randomUUID();
-    const newTransaction: Transaction = {
-      id,
-      date,
-      description: description.trim(),
-      lines,
-    };
-
-    this.transactions.push(newTransaction);
-    await this.repo.saveTransaction(newTransaction);
-
-    await this.recalculateAndSaveBalances();
-    return true;
-  }
-
-  // Recálculo inteligente y guardado en el repositorio
-  private async recalculateAndSaveBalances(): Promise<void> {
-    for (const account of this.accounts.values()) {
-      account.balance = 0;
-    }
-
-    for (const tx of this.transactions) {
-      for (const line of tx.lines) {
-        const account = this.accounts.get(line.accountId);
-        if (!account) continue;
-
-        const esNaturalezaAcreedora = account.nature.behavior === 'acreedora';
-
-        if (line.direction === 'debito') {
-          account.balance += esNaturalezaAcreedora ? -line.amount : line.amount;
-        } else {
-          account.balance += esNaturalezaAcreedora ? line.amount : -line.amount;
-        }
-      }
-    }
-
-    // Guardamos cada cuenta actualizada en el repositorio para mantener la persistencia real
-    for (const account of this.accounts.values()) {
-      await this.repo.saveAccount(account);
+    } catch (error) {
+      console.error('[LedgerManager] Error al cargar los datos:', error);
+      throw error;
     }
   }
 
-  // Obtener todas las cuentas protegiendo el estado interno
+  // --- GETTERS ---
+  getUsers(): any[] {
+    return this.users;
+  }
+
+  getBooks(): any[] {
+    return this.books;
+  }
+
+  getBookMembers(): any[] {
+    return this.bookMembers;
+  }
+
   getAccounts(): Account[] {
-    return Array.from(this.accounts.values());
+    return this.accounts;
   }
 
-  // Obtener el historial de transacciones protegiendo el estado interno
+  /**
+   * Busca y retorna una cuenta específica según su ID único.
+   */
+  getAccountById(id: string): Account | undefined {
+    return this.accounts.find((account) => account.id === id);
+  }
+
   getTransactions(): Transaction[] {
-    return [...this.transactions];
+    return this.transactions;
   }
 
-  // Obtener los totales generales del libro diario
+  /**
+   * Calcula el balance de comprobación (Trial Balance) sumando
+   * todos los débitos y créditos del libro diario.
+   */
   getTrialBalance(): {
     totalDebit: number;
     totalCredit: number;
@@ -169,18 +85,61 @@ class LedgerManager {
       for (const line of tx.lines) {
         if (line.direction === 'debito') {
           totalDebit += line.amount;
-        } else {
+        } else if (line.direction === 'credito') {
           totalCredit += line.amount;
         }
       }
     }
 
+    const imbalance = Number((totalDebit - totalCredit).toFixed(2));
+
     return {
-      totalDebit,
-      totalCredit,
-      imbalance: totalDebit - totalCredit,
+      totalDebit: Number(totalDebit.toFixed(2)),
+      totalCredit: Number(totalCredit.toFixed(2)),
+      imbalance,
     };
+  }
+
+  // --- MÉTODOS DE GUARDADO ---
+  async saveUser(user: any): Promise<void> {
+    await this.repository.saveUser(user);
+    this.users = await this.repository.getUsers();
+  }
+
+  async saveBook(book: any): Promise<void> {
+    await this.repository.saveBook(book);
+    this.books = await this.repository.getBooks();
+  }
+
+  async saveBookMember(member: any): Promise<void> {
+    await this.repository.saveBookMember(member);
+    this.bookMembers = await this.repository.getBookMembers();
+  }
+
+  async saveAccount(account: Account): Promise<void> {
+    await this.repository.saveAccount(account);
+    this.accounts = await this.repository.getAccounts();
+  }
+
+  async saveTransaction(transaction: Transaction): Promise<void> {
+    await this.repository.saveTransaction(transaction);
+    this.transactions = await this.repository.getTransactions();
+  }
+
+  // --- LIMPIEZA TOTAL ---
+  async clearAllData(): Promise<void> {
+    await this.repository.clearAllData();
+    this.users = [];
+    this.books = [];
+    this.bookMembers = [];
+    this.accounts = [];
+    this.transactions = [];
+    this.loaded = false;
+    console.log(
+      '[LedgerManager] Memoria y base de datos reseteadas por completo.',
+    );
   }
 }
 
+// Instancia global exportada del motor
 export const motorContable = new LedgerManager();

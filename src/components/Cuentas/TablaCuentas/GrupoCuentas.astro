@@ -5,69 +5,71 @@ import { ACCOUNT_NATURE_CONFIG } from '@constants/contabilidadConfig';
 
 interface Props {
   nature: AccountNature;
-  cuentas: Account[];
 }
 
-const { nature, cuentas } = Astro.props
-  ? Astro.props
-  : { nature: 'activo' as AccountNature, cuentas: [] };
+const { nature } = Astro.props;
 
-const config = ACCOUNT_NATURE_CONFIG[nature];
-const items = cuentas.filter((c) => c.nature.label === nature);
-const subtotal = items.reduce((acc, c) => acc + c.balance, 0);
-const tieneCuentas = items.length > 0;
+/*
+{tieneCuentas ? (
+  items.map((cuenta) => {
+    const esAcreedora = cuenta.nature.behavior === 'acreedora';
+    return (
+      <tr>
+        <td class="cuenta__column cuenta__label">
+          <a href={`/cuentas/detalle?id=${cuenta.id}`} style="color: inherit; text-decoration: none;">
+            {cuenta.name}
+          </a>
+        </td>
+        <td class="cuenta__column cuenta__amount">
+          {!esAcreedora ? `$${cuenta.balance.toFixed(2)}` : '-'}
+        </td>
+        <td class="cuenta__column cuenta__amount">
+          {esAcreedora ? `$${cuenta.balance.toFixed(2)}` : '-'}
+        </td>
+      </tr>
+    );
+  })
+)
+*/
 ---
 
-<table class={`grupo__tabla grupo--${nature}`}>
-  <caption class="grupo__caption">{config.label.toUpperCase()}</caption>
+<table class={`grupo_cuentas grupo__cuentas--${nature}`}>
+  <caption class="grupo_cuentas__caption">{nature.toUpperCase()}</caption>
   <colgroup>
     <col style="width: 50%;" />
     <col style="width: 25%;" />
     <col style="width: 25%;" />
   </colgroup>
-  <thead class="grupo__header">
+  <thead class="grupo_cuentas__header">
     <tr>
-      <th class="text-left">Cuenta</th>
-      <th class="text-right">Débito</th>
-      <th class="text-right">Crédito</th>
+      <th class="header__titulos">Cuenta</th>
+      <th class="header__titulos">Débito</th>
+      <th class="header__titulos">Crédito</th>
     </tr>
   </thead>
-  <tbody class="grupo__body">
-    {tieneCuentas ? (
-      items.map((cuenta) => {
-        const esAcreedora = cuenta.nature.behavior === 'acreedora';
-        return (
-          <tr class="cuenta__fila">
-            <td class="cuenta__column cuenta__nombre">{cuenta.name}</td>
-            <td class="cuenta__column cuenta__amount text-right">
-              {!esAcreedora ? `$${cuenta.balance.toFixed(2)}` : '-'}
-            </td>
-            <td class="cuenta__column cuenta__amount text-right">
-              {esAcreedora ? `$${cuenta.balance.toFixed(2)}` : '-'}
-            </td>
-          </tr>
-        );
-      })
-    ) : (
-      <tr class="cuenta__fila">
-        <td colspan="3" class="cuenta__column empty-section text-center">
-          Sin cuentas
-        </td>
-      </tr>
-    )}
+  <tbody class="grupo_cuentas__body" id=`cuentas_${nature}`>
+    <tr>
+      <td colspan="3" class="cuenta__column empty-section cuenta__label">
+        Sin cuentas
+      </td>
+    </tr>
   </tbody>
   <tfoot class="grupo__footer">
-    <tr class="footer__fila">
-      <td class="footer__column subtotal__label">Total</td>
-      <td colspan="2" class="footer__column cuenta__amount text-right">
-        ${subtotal.toFixed(2)}
+    <tr>
+      <td class="footer__column cuenta__label">Total</td>
+      <td
+        colspan="2"
+        class="footer__column cuenta__amount grupo_cuentas__total_amount"
+        id=`total_${nature}`
+      >
+        -
       </td>
     </tr>
   </tfoot>
 </table>
 
 <style>
-  .grupo__tabla {
+  .grupo__cuentas {
     width: 100%;
     border-collapse: collapse;
     border-radius: 0.5rem;
@@ -76,7 +78,7 @@ const tieneCuentas = items.length > 0;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
   }
 
-  .grupo__caption {
+  .grupo_cuentas__caption {
     font-size: 0.95rem;
     font-weight: 700;
     padding: 0.6rem 1rem;
@@ -87,7 +89,7 @@ const tieneCuentas = items.length > 0;
     letter-spacing: 0.05em;
   }
 
-  .grupo__header th {
+  .header__titulos {
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -97,27 +99,21 @@ const tieneCuentas = items.length > 0;
     border-bottom: 1px solid #374151;
   }
 
-  .text-left {
-    text-align: left;
-  }
-  .text-center {
-    text-align: center;
-  }
-  .text-right {
-    text-align: right;
-  }
-
   .cuenta__column {
     padding: 0.5rem 0.75rem;
     border-bottom: 1px solid #1f2937;
     font-size: 0.9rem;
   }
 
-  .cuenta__nombre {
-    color: #e5e7eb;
+  .cuenta__label {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 0.8rem;
+    text-transform: uppercase;
   }
 
   .cuenta__amount {
+    text-align: right;
     font-family: monospace;
     font-weight: 600;
     color: #f9fafb;
@@ -129,7 +125,7 @@ const tieneCuentas = items.length > 0;
     color: #6b7280;
   }
 
-  .grupo__footer {
+  .grupo_cuentas__footer {
     background: #161b22;
     font-weight: 600;
   }
@@ -139,10 +135,7 @@ const tieneCuentas = items.length > 0;
     border-top: 1px solid #374151;
   }
 
-  .subtotal__label {
-    text-align: right;
-    color: #9ca3af;
-    font-size: 0.8rem;
-    text-transform: uppercase;
+  .grupo_cuentas__total_amount {
+    text-align: center;
   }
 </style>

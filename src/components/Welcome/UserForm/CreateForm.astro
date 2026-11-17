@@ -1,0 +1,129 @@
+---
+// @components/welcome/UserForm/CreateForm.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+// UI Common component
+import Box from '@components/UI/Common/Box.astro';
+import Button from '@components/UI/Common/Button.astro';
+// Rest Component
+import FormCampo from '@components/Welcome/UserForm/FormCampo.astro';
+
+interface Props extends HTMLAttributes<'div'> {
+  style?: Properties;
+}
+
+const {
+  id: idName = '',
+  class: className = '',
+  style: userStyle,
+} = Astro.props;
+---
+
+<Box
+  id={idName}
+  class:list={['user_create', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+  }}
+>
+  <Box as="header" style={{ flexDirection: 'column' }}>
+    <h2 class="header__title">Crea tu Perfil</h2>
+    <h3 class="header__subtitle">Completa todos los campos.</h3>
+  </Box>
+
+  <form class="user_create__form">
+    <Box class={'form__conteiner_campos'}>
+      <Box class={'form__campos'}>
+        <FormCampo
+          id="user-name-create"
+          textLabel="Nombre o Alias"
+          type={'text'}
+          placeholder={'Ej. Juan Pérez'}
+          required={true}
+          minlength={3}
+          maxlength={32}
+        />
+
+        <FormCampo
+          id="user-pass-create"
+          textLabel="Contraseña"
+          type={'password'}
+          placeholder={'Contraseña Segura'}
+          required={true}
+          minlength={8}
+          maxlength={32}
+        />
+
+        <FormCampo
+          id="user-pass-confirm"
+          textLabel="Confirme Contraseña"
+          type={'password'}
+          placeholder={'Repita Contraseña Segura'}
+          required={true}
+          minlength={8}
+          maxlength={32}
+        />
+      </Box>
+    </Box>
+    <Box class={'form__actions'}>
+      <Button type="submit" style={{ flex: '1' }}>
+        Guardar y Entrar
+      </Button>
+      <Button type="reset" id="btn-cancelar-creacion" variant="ghost">
+        Cancelar
+      </Button>
+    </Box>
+  </form>
+</Box>
+
+<style>
+  .header__title {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .header__subtitle {
+    font-size: 1rem;
+    color: #b1b1ba;
+  }
+
+  .user_create {
+    flex: 1;
+    flex-direction: column;
+    justify-content: start;
+    gap: 0.8rem;
+  }
+
+  .user_create__form {
+    width: 100%;
+    text-align: left;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+
+  .form__conteiner_campos {
+    background-color: #18181a;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.5rem;
+    flex: 1;
+    flex-direction: column;
+    justify-content: start;
+  }
+
+  .form__campos {
+    background: #27272a;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.5rem;
+    flex-direction: column;
+    justify-content: start;
+    gap: 1rem;
+  }
+
+  .form__actions {
+    gap: 0.5rem;
+  }
+</style>

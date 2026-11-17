@@ -3,7 +3,6 @@
 import MainLayout from '@layouts/MainLayout.astro';
 import HeaderSection from '@components/UI/HeaderSection.astro';
 import LibroDiario from '@components/Transacciones/LibroDiario.astro';
-import { motorContable } from '@lib/LedgerManager.ts';
 
 const titlePage = 'InBalance | Transacciones';
 const description = 'Registro de asientos contables.';
@@ -12,9 +11,14 @@ const description = 'Registro de asientos contables.';
 <MainLayout titlePage={titlePage} description={description}>
   <section class="transacciones_section">
     <HeaderSection>Libro Diario (Asientos)</HeaderSection>
-    <LibroDiario libroMayor={motorContable} />
+    <LibroDiario />
   </section>
 </MainLayout>
+
+<script>
+  import { renderizarLibroDiario } from '@scripts/renderTransacciones';
+  renderizarLibroDiario();
+</script>
 
 <style>
   .transacciones_section {

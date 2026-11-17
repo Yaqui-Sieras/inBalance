@@ -1,0 +1,45 @@
+---
+// @components/welcome/WelcomeActions.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import Box from '@components/UI/Common/Box.astro';
+import Button from '@components/UI/Common/Button.astro';
+import Input from '@components/UI/Common/Input.astro';
+
+interface Props extends HTMLAttributes<'div'> {
+  style?: Properties;
+}
+
+const {
+  id: idName = '',
+  class: className = '',
+  style: userStyle,
+} = Astro.props;
+---
+
+<Box
+  id={idName}
+  class:list={['welcome_actions', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+  }}
+>
+  <Button id="btn-mostrar-form" variant="primary" style={{ flex: '1' }}>
+    Crear Usuario
+  </Button>
+  <Button id="btn-subir-respaldo" variant="ghost">
+    Restaurar Respaldo
+  </Button>
+  <Input
+    type="file"
+    id="file-input-backup"
+    accept=".json"
+    style={{ display: 'none' }}
+  />
+</Box>
+
+<style>
+  .welcome_actions {
+    gap: 0.5rem;
+  }
+</style>

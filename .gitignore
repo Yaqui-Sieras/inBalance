@@ -6,6 +6,9 @@ dist/
 # dependencies
 node_modules/
 
+# docs extras
+docs/private/
+
 # logs
 npm-debug.log*
 yarn-debug.log*

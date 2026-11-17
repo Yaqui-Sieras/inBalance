@@ -1,0 +1,40 @@
+---
+// @components/welcome/UserForm.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import Box from '@components/UI/Common/Box.astro';
+import CreateForm from '@components/Welcome/UserForm/CreateForm.astro';
+import LoginForm from '@components/Welcome/UserForm/LoginForm.astro';
+
+interface Props extends HTMLAttributes<'div'> {
+  mode?: 'create' | 'login';
+  style?: Properties;
+}
+
+const {
+  id: idName = '',
+  mode = 'create',
+  class: className = '',
+  style: userStyle,
+} = Astro.props;
+
+const isLogin = mode === 'login';
+---
+
+<Box
+  id={idName}
+  class:list={['user_form', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+  }}
+>
+  {isLogin ? <LoginForm /> : <CreateForm />}
+</Box>
+
+<style>
+  .user_form {
+    flex: 1;
+    flex-direction: column;
+    justify-content: start;
+  }
+</style>

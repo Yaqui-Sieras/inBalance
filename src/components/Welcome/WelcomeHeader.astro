@@ -1,0 +1,50 @@
+---
+// @components/welcome/WelcomeHeader.astro
+import Img from '@components/UI/Common/Img.astro';
+import Logo from '@assets/imgs/logo-example.png';
+---
+
+<header class="welcome_header">
+  <h1 class="welcome_header__title">
+    <Img
+      src={Logo.src}
+      style={{ height: '2.5rem', borderRadius: '0.5rem' }}
+      alt="InBalance"
+      height={'40'}
+    />
+    <span>
+      Bienvenido a <span class="title__highlight">InBalance</span>
+    </span>
+  </h1>
+  <h2 class="welcome_header__subtitle">
+    Tu sistema contable de partida doble.
+  </h2>
+</header>
+
+<style>
+  .welcome_header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .welcome_header__title {
+    font-size: 1.75rem;
+    color: #f4f4f5;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 0.6rem;
+  }
+
+  .title__highlight {
+    color: #3b82f6;
+  }
+
+  .welcome_header__subtitle {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #cfcfd0;
+  }
+</style>
