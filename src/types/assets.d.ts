@@ -1,30 +1,38 @@
 // src/types/assets.d.ts
+interface AssetMetadata {
+  src: string;
+  width: number;
+  height: number;
+  format: string;
+  orientation?: number;
+}
+
 declare module '*.png' {
-  const value: ImageMetadata;
+  const value: AssetMetadata;
   export default value;
 }
 
 declare module '*.svg' {
-  const value: ImageMetadata;
+  const value: AssetMetadata;
   export default value;
 }
 
 declare module '*.jpg' {
-  const value: ImageMetadata;
+  const value: AssetMetadata;
   export default value;
 }
 
 declare module '*.jpeg' {
-  const value: ImageMetadata;
+  const value: AssetMetadata;
   export default value;
 }
 
 declare module '*.webp' {
-  const value: ImageMetadata;
+  const value: AssetMetadata;
   export default value;
 }
 
 declare module '*.avif' {
-  const value: ImageMetadata;
+  const value: AssetMetadata;
   export default value;
 }
