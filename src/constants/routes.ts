@@ -30,7 +30,7 @@ export const ROUTES_CONFIG = {
   },
   access: {
     label: 'Acceso',
-    path: 'Acceso/',
+    path: 'acceso/',
     target: '_self',
     icon: '👋',
     scope: 'public',
