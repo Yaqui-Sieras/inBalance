@@ -1,10 +1,15 @@
 /// <reference types="vitest/config" />
 import { getViteConfig } from 'astro/config';
 
-// getViteConfig carga astro.config.mjs, así los tests ven el mismo
-// `import.meta.env.BASE_URL` y los mismos alias que la aplicación.
 export default getViteConfig({
+  resolve: {
+    tsconfigPaths: true,
+  },
   test: {
-    include: ['src/**/*.test.ts'],
+    include: ['tests/**/*.test.ts'],
+    environment: 'node',
+    env: {
+      SITE: 'https://localhost',
+    },
   },
 });
