@@ -1,21 +1,49 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"],
+  // Include the necessary files for your project
+  "include": ["src/**/*", "astro.config.mjs"],
+  //"include": [".astro/types.d.ts"],
+  "exclude": ["node_modules", "dist"],
   "compilerOptions": {
+    // Base Options recommended for all projects
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2025",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    // Enable strict type checking so you can catch bugs early
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    // Transpile our TypeScript code to JavaScript
+    "outDir": "dist",
+    // Include the DOM types
+    "lib": ["es2025", "DOM", "DOM.Iterable"],
+    // Extras
+    "preserveSymlinks": true,
+    "types": ["node"],
     "paths": {
       "@/*": ["./src/*"],
       "@layouts/*": ["./src/layouts/*"],
       "@components/*": ["./src/components/*"],
       "@types-local/*": ["./src/types/*"],
-      "@interfaces/*": ["./src/interfaces/*"],
       "@constants/*": ["./src/constants/*"],
       "@repositories/*": ["./src/repositories/*"],
       "@lib/*": ["./src/lib/*"],
+      "@services/*": ["./src/services/*"],
       "@utils/*": ["./src/utils/*"],
       "@data/*": ["./src/data/*"],
       "@assets/*": ["./src/assets/*"],
       "@content/*": ["./src/content/*"]
     }
-  }
+  },
+  "contentMappers": [
+    {
+      "package": "@astrojs/ts-content-mapper",
+      "extensions": [".astro"]
+    }
+  ]
 }
