@@ -1,6 +1,10 @@
 ---
 // @components/home/PanelContable/LibroDiario/AsientoItem.astro
-import type { Account, Transaction } from '@types-local/contabilidad';
+import type {
+  Account,
+  Transaction,
+  TransactionLine,
+} from '@types-local/contabilidad';
 
 interface Props {
   transaccion: Transaction;
@@ -21,8 +25,8 @@ const { transaccion, cuentas } = Astro.props;
       </div>
     </th>
   </tr>
-  {transaccion.lines.map((line) => {
-    const account = cuentas.find((a) => a.id === line.accountId);
+  {transaccion.lines.map((line: TransactionLine) => {
+    const account = cuentas.find((a: Account) => a.id === line.accountId);
     return (
       <tr class="asiento__fila">
         <td class="asiento__column">
