@@ -17,7 +17,7 @@ const detectors = [
     const isUserPage =
       repo.toLowerCase() === `${owner}.github.io`.toLowerCase();
     return {
-      site: `https://${owner}.github.io`,
+      site: `https://${owner.toLowerCase()}.github.io`,
       base: isUserPage ? '/' : `/${repo}/`,
     };
   },
