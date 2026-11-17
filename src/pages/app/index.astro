@@ -1,12 +1,12 @@
 ---
 // @pages/index.astro
-import MainLayout from '@layouts/MainLayout.astro';
+import AppLayout from '@layouts/AppLayout.astro';
 
 const titlePage = 'InBalance | Dashboard';
 const description = 'Panel de control principal de inBalance.';
 ---
 
-<MainLayout titlePage={titlePage} description={description}>
+<AppLayout titlePage={titlePage} description={description}>
   <section class="dashboard">
     <!-- Tarjetas de Resumen Rápido (KPIs) -->
     <div class="dashboard__kpis">
@@ -30,7 +30,7 @@ const description = 'Panel de control principal de inBalance.';
       </div>
     </div>
   </section>
-</MainLayout>
+</AppLayout>
 
 <script>
   import { checkAuthOrRedirect } from '@lib/authGuard';
