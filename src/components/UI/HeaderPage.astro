@@ -1,26 +1,30 @@
 ---
 // @components/UI/HeaderPage.astro
-import FlexContainer from '@components/UI/Common/FlexContainer.astro';
+import Box from '@components/UI/Common/Box.astro';
 import Link from '@components/UI/Common/Link.astro';
 import Navigation from '@components/UI/Common/Navigation.astro';
 import { NAV_ITEMS } from '@constants/routes';
 ---
 
-<FlexContainer baseCSS={{ position: 'relative', justifyContent: 'start' }}>
+<Box class={'header_page__Container'}>
   <Link href="/" class="header_page__home_link" style={{ padding: '0.5rem' }}>
     <h1 class="header_page__title">📊 inBalance</h1>
     <p class="header_page__subtitle">Tu salud financiera de un vistazo</p>
   </Link>
   <Navigation
     links={NAV_ITEMS}
-    navBaseCSS={{ gap: '1.25rem' }}
-    navStyle={{ position: 'absolute', left: '40%', bottom: 0 }}
-    linkHoverCSS={{ color: '#2563eb', borderBottom: '5px solid #2563eb' }}
-    linkCurrentCSS={{ color: '#2563eb', borderBottom: '5px solid #2563eb' }}
+    navStyle={{ position: 'absolute', left: '40%', bottom: 0, gap: '1.25rem' }}
+    linkClass={'nav_item'}
+    linkCurrentClass={'nav_item--current'}
   />
-</FlexContainer>
+</Box>
 
 <style>
+  .header_page__Container {
+    position: relative;
+    justify-content: start;
+  }
+
   .header_page__title {
     font-size: 1.2rem;
     color: #3b82f6;
@@ -29,5 +33,15 @@ import { NAV_ITEMS } from '@constants/routes';
   .header_page__subtitle {
     font-size: 1rem;
     color: #a1a1aa;
+  }
+
+  .nav_item:hover {
+    color: #2563eb;
+    border-bottom: 5px solid #2563eb;
+  }
+
+  .nav_item--current {
+    color: #2563eb;
+    border-bottom: 5px solid #2563eb;
   }
 </style>
