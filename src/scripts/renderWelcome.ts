@@ -5,7 +5,6 @@ import {
   verifyUserLogin,
   restoreBackupFromJsonString,
 } from '@services/welcomeService';
-import { motorContable } from '@lib/LedgerManager';
 import { ROUTES } from '@constants/routes';
 import { ejecutarRenderSeguro } from './baseRender';
 
