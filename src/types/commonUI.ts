@@ -5,7 +5,7 @@ export interface StyleProps extends Properties {
   // Relacionado con el texto
   fontFamily?: Property.FontFamily;
   fontWeight?: Property.FontWeight;
-  fontsize?: Property.FontSize<string | number>;
+  fontSize?: Property.FontSize;
   letterSpacing?: Property.LetterSpacing;
   color?: Property.Color;
   textDecoration?: Property.TextDecoration;
@@ -22,7 +22,7 @@ export interface StyleProps extends Properties {
   background?: Property.Background;
   padding?: Property.Padding;
   border?: Property.Border;
-  bordertop?: Property.BorderTop;
+  borderTop?: Property.BorderTop;
   borderLeft?: Property.BorderLeft;
   borderRight?: Property.BorderRight;
   borderBottom?: Property.BorderBottom;
