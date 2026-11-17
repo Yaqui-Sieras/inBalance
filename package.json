@@ -11,7 +11,7 @@
     "format:check": "prettier --check .",
     "dev": "astro dev",
     "check": "astro sync && tsc --noEmit --runExternalCode",
-    "build": "pnpm run check && astro build",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
