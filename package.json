@@ -21,11 +21,11 @@
     "prettier": "3.10.1",
     "prettier-plugin-astro": "1.1.2",
     "typescript": "^7.1.0-beta"
+    "csstype": "3.2.3",
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.5",
     "astro": "7.4.12",
-    "csstype": "3.2.3",
     "sentei-css": "0.2.0"
   }
 }
