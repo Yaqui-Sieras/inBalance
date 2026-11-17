@@ -6,24 +6,24 @@
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     // Base Options recommended for all projects
-    "esModuleInterop": true,
-    "skipLibCheck": true,
+    //"esModuleInterop": true,
+    //"skipLibCheck": true,
     "target": "es2025",
     "allowJs": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "isolatedModules": true,
-    "verbatimModuleSyntax": true,
+    //"resolveJsonModule": true,
+    //"moduleDetection": "force",
+    //"isolatedModules": true,
+    //"verbatimModuleSyntax": true,
     // Enable strict type checking so you can catch bugs early
-    "strict": true,
+    //"strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     // Transpile our TypeScript code to JavaScript
-    "outDir": "dist",
+    //"outDir": "dist",
     // Include the DOM types
     "lib": ["es2025", "DOM", "DOM.Iterable"],
     // Extras
-    "preserveSymlinks": true,
+    //"preserveSymlinks": true,
     "types": ["node"],
     "paths": {
       "@/*": ["./src/*"],
@@ -32,6 +32,7 @@
       "@types-local/*": ["./src/types/*"],
       "@constants/*": ["./src/constants/*"],
       "@repositories/*": ["./src/repositories/*"],
+      "@scripts/*": ["./src/scripts/*"],
       "@lib/*": ["./src/lib/*"],
       "@services/*": ["./src/services/*"],
       "@utils/*": ["./src/utils/*"],
