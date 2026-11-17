@@ -17,7 +17,14 @@ function withPageSlash(path: string): string {
 
 export const BASE_URL = withTrailingSlash(import.meta.env.BASE_URL || '/');
 const SITE_URL: string | undefined = import.meta.env.SITE; // undefined en local sin plataforma
-export const SITE_ORIGIN = SITE_URL ? new URL(SITE_URL).origin : undefined;
+export const SITE_ORIGIN = (() => {
+  if (!SITE_URL) return undefined;
+  try {
+    return new URL(SITE_URL).origin;
+  } catch {
+    return undefined;
+  }
+})();
 
 /**
  * Determina si una URL o ruta dada apunta fuera del dominio de la aplicación.
