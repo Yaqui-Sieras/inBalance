@@ -1,13 +1,9 @@
 ---
 // @pages/index.astro
 import MainLayout from '@layouts/MainLayout.astro';
-import { motorContable } from '@lib/LedgerManager';
 
 const titlePage = 'InBalance | Dashboard';
 const description = 'Panel de control principal de inBalance.';
-
-// Mostrar métricas rápidas (KPIs)
-const { totalDebit, totalCredit, imbalance } = motorContable.getTrialBalance();
 ---
 
 <MainLayout titlePage={titlePage} description={description}>
@@ -16,29 +12,38 @@ const { totalDebit, totalCredit, imbalance } = motorContable.getTrialBalance();
     <div class="dashboard__kpis">
       <div class="kpi__card">
         <h3>Total Débitos</h3>
-        <p class="kpi__amount">${totalDebit.toFixed(2)}</p>
+        <p class="kpi__amount" id="kpi_debit">
+          $0.00
+        </p>
       </div>
       <div class="kpi__card">
         <h3>Total Créditos</h3>
-        <p class="kpi__amount">${totalCredit.toFixed(2)}</p>
+        <p class="kpi__amount" id="kpi_credit">
+          $0.00
+        </p>
       </div>
       <div class="kpi__card">
         <h3>Balance</h3>
-        <p class="kpi__amount">${imbalance.toFixed(2)}</p>
+        <p class="kpi__amount" id="kpi_imbalance">
+          $0.00
+        </p>
       </div>
-    </div>
-
-    <!-- Enlaces de Navegación a las Nuevas Páginas -->
-    <div class="dashboard__actions">
-      <a href="/cuentas/" class="btn btn--primary">
-        Ver Plan de Cuentas
-      </a>
-      <a href="/transacciones/" class="btn btn--secondary">
-        Ver Libro Diario
-      </a>
     </div>
   </section>
 </MainLayout>
+
+<script>
+  import { checkAuthOrRedirect } from '@lib/authGuard';
+  // import { renderizarDashboard } from '@utils/renderDashboard';
+
+  // Ejecutamos la comprobación apenas carga el script en el navegador
+  if (typeof window !== 'undefined') {
+    checkAuthOrRedirect(window.location.pathname).then(() => {
+      console.log('[Guard] Acceso autorizado a la página actual.');
+      // renderizarDashboard();
+    });
+  }
+</script>
 
 <style>
   .dashboard {
@@ -78,11 +83,7 @@ const { totalDebit, totalCredit, imbalance } = motorContable.getTrialBalance();
     color: #f4f4f5;
   }
 
-  .dashboard__actions {
-    display: flex;
-    gap: 1rem;
-  }
-
+  /*
   .btn {
     padding: 0.75rem 1.5rem;
     border-radius: 0.375rem;
@@ -106,4 +107,5 @@ const { totalDebit, totalCredit, imbalance } = motorContable.getTrialBalance();
   .btn--secondary:hover {
     background-color: #3f3f46;
   }
+  */
 </style>
