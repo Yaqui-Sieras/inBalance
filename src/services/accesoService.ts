@@ -1,4 +1,4 @@
-// @services/welcomeService.ts
+// @services/accesoService.ts
 import type { LedgerManager } from '@lib/LedgerManager.ts';
 import { STORAGE_KEYS } from '@constants/storage';
 import { hashPassword } from '@utils/crypto';
@@ -108,6 +108,6 @@ export async function restoreBackupFromJsonString(
 
   const usuariosRestaurados = ledgerEngine.getUsers();
   if (usuariosRestaurados.length > 0) {
-    setActiveUser(usuariosRestaurados[0].id);
+    if (usuariosRestaurados[0]) setActiveUser(usuariosRestaurados[0].id);
   }
 }
