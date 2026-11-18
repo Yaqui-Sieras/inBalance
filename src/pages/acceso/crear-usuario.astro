@@ -1,0 +1,52 @@
+---
+// @pages/acceso/crear-usuario.astro
+import AccessLayout from '@layouts/AccessLayout.astro';
+import Box from '@components/UI/Common/Box.astro';
+
+import AccesoHeader from '@components/Acceso/AccesoHeader.astro';
+
+import UserForm from '@components/Acceso/UserForm.astro';
+
+const titlePage = 'InBalance | Acceso';
+const description =
+  'Configuración inicial y gestión de perfiles locales en inBalance.';
+---
+
+<AccessLayout titlePage={titlePage} description={description}>
+  <Box class="welcome_view">
+    <AccesoHeader />
+
+    <Box id="welcome-card" class="welcome_view__content">
+      <!-- Formulario de creación de usuario (Gestionado por los scripts) -->
+      <UserForm mode="create" />
+    </Box>
+  </Box>
+</AccessLayout>
+
+<script>
+  import { checkAuthOrRedirect } from '@lib/authGuard';
+
+  if (typeof window !== 'undefined') {
+    checkAuthOrRedirect(window.location.pathname).then(() => {});
+  }
+</script>
+
+<style>
+  .welcome_view {
+    flex: 1;
+    flex-direction: column;
+    justify-content: start;
+    gap: 1.5rem;
+  }
+
+  .welcome_view__content {
+    max-width: 480px;
+    background: #1f1f23;
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+</style>
