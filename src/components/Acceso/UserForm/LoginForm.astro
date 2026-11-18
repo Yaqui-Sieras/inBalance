@@ -6,9 +6,9 @@ import type { Properties } from 'csstype';
 import Box from '@components/UI/Common/Box.astro';
 import Button from '@components/UI/Common/Button.astro';
 // Rest Component
-import FormCampo from '@components/Welcome/UserForm/FormCampo.astro';
-import ProfileAvatar from '@components/Welcome/ProfileSelection/ProfileTemplate/ProfileAvatar.astro';
-import ProfileName from '@components/Welcome/ProfileSelection/ProfileTemplate/ProfileName.astro';
+import FormCampo from '@components/Acceso/UserForm/FormCampo.astro';
+import ProfileAvatar from '@components/Acceso/ProfileSelection/ProfileTemplate/ProfileAvatar.astro';
+import ProfileName from '@components/Acceso/ProfileSelection/ProfileTemplate/ProfileName.astro';
 
 interface Props extends HTMLAttributes<'div'> {
   style?: Properties;
@@ -33,9 +33,9 @@ const {
     <h3 class="header__subtitle">Ingrese su contraseña.</h3>
   </Box>
 
-  <form class="user_login__form">
+  <form id="form-login-user" class="user_login__form">
     <Box class={'form__conteiner_campos'}>
-      <Box class={'form__campos'}>
+      <Box id={'login-profile'} class={'form__campos'}>
         <Box class={'dataProfile'}>
           <ProfileAvatar id={'login-profile-avatar'} />
           <ProfileName id={'login-profile-name'} />
@@ -64,6 +64,53 @@ const {
     </Box>
   </form>
 </Box>
+
+<script>
+  import type { LedgerManager } from '@lib/LedgerManager.ts';
+  import { ROUTES } from '@constants/routes';
+  import { verifyUserLogin } from '@services/accesoService';
+  import { ejecutarRenderSeguro } from '@scripts/baseRender';
+
+  await ejecutarRenderSeguro(async (ledgerEngine: LedgerManager) => {
+    (document.getElementById('user-pass-login') as HTMLInputElement)?.focus();
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('id');
+    if (!userId) return window.location.replace(ROUTES.ACCESS);
+
+    const user = ledgerEngine.getUserById(userId);
+    if (!user) return window.location.replace(ROUTES.ACCESS);
+
+    const profileAv = document.getElementById('login-profile-avatar');
+    if (profileAv) profileAv.textContent = user.avatar;
+
+    const profileNm = document.getElementById('login-profile-name');
+    if (profileNm) profileNm.textContent = user.name;
+
+    if (userId !== user.id) return window.location.replace(ROUTES.ACCESS);
+
+    document
+      .getElementById('btn-cancelar-login')
+      ?.addEventListener('click', () => {
+        window.location.href = ROUTES.ACCESS;
+      });
+
+    document
+      .getElementById('form-login-user')
+      ?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const pass = (
+          document.getElementById('user-pass-login') as HTMLInputElement
+        ).value;
+
+        try {
+          await verifyUserLogin(ledgerEngine, userId, pass);
+          window.location.href = ROUTES.APPDASHBOARD;
+        } catch (err: any) {
+          alert(err.message || 'Error de autenticación.');
+        }
+      });
+  }, 'Módulo de Iniciar Sesion');
+</script>
 
 <style>
   .header__title {

@@ -1,0 +1,77 @@
+---
+// @components/welcome/WelcomeActions.astro
+import type { HTMLAttributes } from 'astro/types';
+import type { Properties } from 'csstype';
+import Box from '@components/UI/Common/Box.astro';
+import Button from '@components/UI/Common/Button.astro';
+import Input from '@components/UI/Common/Input.astro';
+
+interface Props extends HTMLAttributes<'div'> {
+  style?: Properties;
+}
+
+const {
+  id: idName = '',
+  class: className = '',
+  style: userStyle,
+} = Astro.props;
+---
+
+<Box
+  id={idName}
+  class:list={['welcome_actions', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+  }}
+>
+  <Button id="btn-mostrar-form" variant="primary" style={{ flex: '1' }}>
+    Crear Usuario
+  </Button>
+  <Button id="btn-subir-respaldo" variant="ghost">
+    Restaurar Respaldo
+  </Button>
+  <Input
+    type="file"
+    id="file-input-backup"
+    accept=".json"
+    style={{ display: 'none' }}
+  />
+</Box>
+
+<script>
+  import type { LedgerManager } from '@lib/LedgerManager.ts';
+  import { ROUTES } from '@constants/routes';
+  import { restoreBackupFromJsonString } from '@services/accesoService';
+  import { ejecutarRenderSeguro } from '@scripts/baseRender';
+
+  await ejecutarRenderSeguro(async (ledgerEngine: LedgerManager) => {
+    document
+      .getElementById('btn-mostrar-form')
+      ?.addEventListener('click', () => {
+        window.location.href = ROUTES.CREATEUSER;
+      });
+    const fileInput = document.getElementById(
+      'file-input-backup',
+    ) as HTMLInputElement;
+    document
+      .getElementById('btn-subir-respaldo')
+      ?.addEventListener('click', () => fileInput?.click());
+
+    fileInput?.addEventListener('change', async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      try {
+        await restoreBackupFromJsonString(ledgerEngine, await file.text());
+        window.location.href = ROUTES.APPDASHBOARD;
+      } catch {
+        alert('Respaldo inválido o corrupto.');
+      }
+    });
+  }, 'Módulo de Acceso');
+</script>
+
+<style>
+  .welcome_actions {
+    gap: 0.5rem;
+  }
+</style>

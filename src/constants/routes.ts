@@ -6,7 +6,7 @@ export const ROUTES_CONFIG = {
   // --- RUTAS PÚBLICAS ---
   landing: {
     label: 'Inicio',
-    path: '/',
+    path: buildUrl('/'),
     target: '_self',
     icon: '🏯',
     scope: 'public',
@@ -14,15 +14,15 @@ export const ROUTES_CONFIG = {
   },
   demo: {
     label: 'Demo',
-    path: 'demo/',
+    path: buildUrl('demo/'),
     target: '_self',
-    icon: '🧾',
+    icon: '📓',
     scope: 'public',
     showInNav: true,
   },
   githubRepo: {
     label: 'GitHub Repo',
-    path: 'https://github.com/yaqui-sieras/inBalance',
+    path: buildUrl('https://github.com/yaqui-sieras/inBalance'),
     target: '_blank',
     icon: '🐈‍⬛',
     scope: 'public',
@@ -30,40 +30,56 @@ export const ROUTES_CONFIG = {
   },
   access: {
     label: 'Acceso',
-    path: 'Acceso/',
+    path: buildUrl('acceso/'),
     target: '_self',
-    icon: '👋',
+    icon: '🛎️',
+    scope: 'public',
+    showInNav: false,
+  },
+  createUser: {
+    label: 'Crear Usuario',
+    path: buildUrl('acceso/crear-usuario/'),
+    target: '_self',
+    icon: '🫆',
+    scope: 'public',
+    showInNav: false,
+  },
+  loginUser: {
+    label: 'Iniciar Sesion',
+    path: buildUrl('acceso/iniciar-sesion/'),
+    target: '_self',
+    icon: '🔐',
     scope: 'public',
     showInNav: false,
   },
   privacy: {
     label: 'Privacidad',
-    path: 'privacidad/',
+    path: buildUrl('privacidad/'),
     target: '_blank',
-    icon: '✉️',
+    icon: '🔏',
     scope: 'public',
     showInNav: false,
   },
   terms: {
     label: 'Términos y Condiciones',
-    path: 'terminos-condiciones/',
+    path: buildUrl('terminos-condiciones/'),
     target: '_blank',
-    icon: '✉️',
+    icon: '⚖️',
     scope: 'public',
     showInNav: false,
   },
   license: {
     label: 'Licencia MIT',
-    path: 'LICENSE/',
+    path: buildUrl('LICENSE/'),
     target: '_blank',
-    icon: '✉️',
+    icon: '📃',
     scope: 'public',
     showInNav: false,
   },
   // --- RUTAS PRIVADAS (/app/) ---
   appDashboard: {
     label: 'Dashboard',
-    path: 'app/',
+    path: buildUrl('app/'),
     target: '_self',
     icon: '🏯',
     scope: 'private',
@@ -71,7 +87,7 @@ export const ROUTES_CONFIG = {
   },
   appAccounts: {
     label: 'Cuentas',
-    path: 'app/cuentas/',
+    path: buildUrl('app/cuentas/'),
     target: '_self',
     icon: '🎭',
     scope: 'private',
@@ -79,7 +95,7 @@ export const ROUTES_CONFIG = {
   },
   appAccountDetail: {
     label: 'Detalle de Cuenta',
-    path: 'app/cuentas/detalle/',
+    path: buildUrl('app/cuentas/detalle/'),
     target: '_self',
     icon: '🔍',
     scope: 'private',
@@ -87,7 +103,7 @@ export const ROUTES_CONFIG = {
   },
   appTransactions: {
     label: 'Transacciones',
-    path: 'app/transacciones/',
+    path: buildUrl('app/transacciones/'),
     target: '_self',
     icon: '🧮',
     scope: 'private',
@@ -95,7 +111,7 @@ export const ROUTES_CONFIG = {
   },
   appNewTransaction: {
     label: 'Nueva Transacción',
-    path: 'app/transacciones/nueva/',
+    path: buildUrl('app/transacciones/nueva/'),
     target: '_self',
     icon: '➕',
     scope: 'private',
@@ -103,7 +119,7 @@ export const ROUTES_CONFIG = {
   },
   appReports: {
     label: 'Reportes',
-    path: 'app/reportes/',
+    path: buildUrl('app/reportes/'),
     target: '_self',
     icon: '📊',
     scope: 'private',
@@ -111,7 +127,7 @@ export const ROUTES_CONFIG = {
   },
   appSettings: {
     label: 'Configuración',
-    path: 'app/configuracion/',
+    path: buildUrl('app/configuracion/'),
     target: '_self',
     icon: '⚙️',
     scope: 'private',
@@ -120,7 +136,7 @@ export const ROUTES_CONFIG = {
   // --- REDES Y CONTACTO ---
   gitHubAccount: {
     label: 'Cuenta GitHub',
-    path: 'https://github.com/yaqui-sieras',
+    path: buildUrl('https://github.com/yaqui-sieras'),
     target: '_blank',
     icon: '🐈‍⬛',
     scope: 'public',
@@ -128,7 +144,7 @@ export const ROUTES_CONFIG = {
   },
   linkedin: {
     label: 'LinkedIn',
-    path: 'https://linkedin.com/in/yaqui-sieras-vr/',
+    path: buildUrl('https://linkedin.com/in/yaqui-sieras-vr/'),
     target: '_blank',
     icon: '💼',
     scope: 'public',
@@ -136,7 +152,7 @@ export const ROUTES_CONFIG = {
   },
   email: {
     label: 'Email',
-    path: 'mailto:tu-email@ejemplo.com',
+    path: buildUrl('mailto:tu-email@ejemplo.com'),
     target: '_self',
     icon: '✉️',
     scope: 'public',
@@ -152,14 +168,14 @@ export type RouteItem = (typeof ROUTES_CONFIG)[RouteKey];
 export const ROUTES = Object.fromEntries(
   Object.entries(ROUTES_CONFIG).map(([key, config]) => [
     key.toUpperCase(),
-    buildUrl(config.path),
+    config.path,
   ]),
 ) as Record<Uppercase<RouteKey>, string>;
 
 // Helper interno para no repetir el mapeo de NavItem
 const toNavItem = (config: RouteConfigItem): NavItem => ({
   label: config.label,
-  href: buildUrl(config.path),
+  href: config.path,
   target: config.target,
   icon: config.icon,
 });
@@ -175,15 +191,15 @@ export const APP_NAV_ITEMS: readonly NavItem[] = Object.values(ROUTES_CONFIG)
 export const LEGAL_LINKS = [
   {
     label: ROUTES_CONFIG.license.label,
-    href: buildUrl(ROUTES_CONFIG.license.path),
+    href: ROUTES_CONFIG.license.path,
   },
   {
     label: ROUTES_CONFIG.terms.label,
-    href: buildUrl(ROUTES_CONFIG.terms.path),
+    href: ROUTES_CONFIG.terms.path,
   },
   {
     label: ROUTES_CONFIG.privacy.label,
-    href: buildUrl(ROUTES_CONFIG.privacy.path),
+    href: ROUTES_CONFIG.privacy.path,
   },
 ] as const;
 

@@ -6,7 +6,7 @@ import type { Properties } from 'csstype';
 import Box from '@components/UI/Common/Box.astro';
 import Button from '@components/UI/Common/Button.astro';
 // Rest Component
-import FormCampo from '@components/Welcome/UserForm/FormCampo.astro';
+import FormCampo from '@components/Acceso/UserForm/FormCampo.astro';
 
 interface Props extends HTMLAttributes<'div'> {
   style?: Properties;
@@ -31,7 +31,7 @@ const {
     <h3 class="header__subtitle">Completa todos los campos.</h3>
   </Box>
 
-  <form class="user_create__form">
+  <form id={'form-create-user'} class="user_create__form">
     <Box class={'form__conteiner_campos'}>
       <Box class={'form__campos'}>
         <FormCampo
@@ -75,6 +75,45 @@ const {
     </Box>
   </form>
 </Box>
+
+<script>
+  import type { LedgerManager } from '@lib/LedgerManager.ts';
+  import { ROUTES } from '@constants/routes';
+  import { createUserAndLogin } from '@services/accesoService';
+  import { ejecutarRenderSeguro } from '@scripts/baseRender';
+
+  await ejecutarRenderSeguro(async (ledgerEngine: LedgerManager) => {
+    document
+      .getElementById('btn-cancelar-creacion')
+      ?.addEventListener('click', () => {
+        window.location.href = ROUTES.ACCESS;
+      });
+
+    document
+      .getElementById('form-create-user')
+      ?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const pass = (
+          document.getElementById('user-pass-create') as HTMLInputElement
+        ).value;
+        const confirm = (
+          document.getElementById('user-pass-confirm') as HTMLInputElement
+        ).value;
+
+        if (pass !== confirm) return alert('Las contraseñas no coinciden.');
+
+        try {
+          const name = (
+            document.getElementById('user-name-create') as HTMLInputElement
+          ).value;
+          await createUserAndLogin(ledgerEngine, name, pass);
+          window.location.href = ROUTES.APPDASHBOARD;
+        } catch (err) {
+          alert('Error al guardar el usuario en IndexedDB.');
+        }
+      });
+  }, 'Módulo de Crear Usuario');
+</script>
 
 <style>
   .header__title {

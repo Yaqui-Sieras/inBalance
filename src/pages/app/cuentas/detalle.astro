@@ -1,10 +1,10 @@
 ---
 // src/pages/cuentas/detalle.astro
-import MainLayout from '@layouts/MainLayout.astro';
+import AppLayout from '@layouts/AppLayout.astro';
 import HeaderSection from '@components/UI/HeaderSection.astro';
 ---
 
-<MainLayout
+<AppLayout
   titlePage="InBalance | Detalle de Cuenta"
   description="Detalles y movimientos de la cuenta"
 >
@@ -22,7 +22,7 @@ import HeaderSection from '@components/UI/HeaderSection.astro';
       </p>
     </div>
   </div>
-</MainLayout>
+</AppLayout>
 
 <script>
   import { renderizarDetalleCuenta } from '@scripts/renderDetalle';

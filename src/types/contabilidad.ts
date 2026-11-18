@@ -50,3 +50,31 @@ export interface Transaction {
   description: string; // Concepto o motivo (ej: "Compra de supermercado")
   lines: TransactionLine[]; // Las líneas que, sumadas, deben dar 0
 }
+
+// La estructura de una Cuenta
+export interface User {
+  id: string;
+  name: string;
+  avatar: string;
+  passwordHash: string;
+  createAt: string;
+  updateAt: string;
+}
+
+/*
+// La estructura de una Cuenta
+export interface Book {
+  id: string;
+  name: string;
+  nature: NatureMetadata;
+  balance: number;
+}
+
+// La estructura de una Cuenta
+export interface BookMember {
+  id: string;
+  name: string;
+  avatar: NatureMetadata;
+  balance: number;
+}
+*/

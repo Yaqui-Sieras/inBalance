@@ -4,9 +4,9 @@ import type { HTMLAttributes } from 'astro/types';
 import type { Properties } from 'csstype';
 import Box from '@components/UI/Common/Box.astro';
 
-import LoadingPlaceholder from '@components/Welcome/ProfileSelection/LoadingPlaceholder.astro';
-import NotProfilePlaceholder from '@components/Welcome/ProfileSelection/NotProfilePlaceholder.astro';
-import ProfileListPlaceholder from '@components/Welcome/ProfileSelection/ProfileListPlaceholder.astro';
+import LoadingPlaceholder from '@components/Acceso/ProfileSelection/LoadingPlaceholder.astro';
+import NotProfilePlaceholder from '@components/Acceso/ProfileSelection/NotProfilePlaceholder.astro';
+import ProfileListPlaceholder from '@components/Acceso/ProfileSelection/ProfileListPlaceholder.astro';
 
 interface Props extends HTMLAttributes<'div'> {
   style?: Properties;
@@ -48,6 +48,41 @@ const {
     />
   </Box>
 </Box>
+
+<script>
+  import type { LedgerManager } from '@lib/LedgerManager.ts';
+  import { ROUTES } from '@constants/routes';
+  import { ejecutarRenderSeguro } from '@scripts/baseRender';
+
+  await ejecutarRenderSeguro(async (ledgerEngine: LedgerManager) => {
+    const users = ledgerEngine.getUsers();
+
+    document.getElementById('loading-placeholder')!.style.display = 'none';
+
+    if (users.length === 0) {
+      document.getElementById('not-profile-placeholder')!.style.display =
+        'flex';
+    } else {
+      const container = document.getElementById('profile-list-container')!;
+      const template = document.getElementById(
+        'profile-template',
+      ) as HTMLTemplateElement;
+      container.style.display = 'flex';
+
+      users.forEach((user) => {
+        const clone = template.content.cloneNode(true) as HTMLElement;
+        clone.querySelector('.profile_avatar')!.textContent = user.avatar;
+        clone.querySelector('.profile_name')!.textContent = user.name;
+
+        clone.querySelector('.profile')!.addEventListener('click', () => {
+          window.location.href = `${ROUTES.LOGINUSER}?id=${user.id}`;
+        });
+
+        container.appendChild(clone);
+      });
+    }
+  }, 'Módulo de Acceso');
+</script>
 
 <style>
   .profile_selection {

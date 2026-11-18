@@ -1,14 +1,14 @@
 // @lib/LedgerManager.ts
 import { IndexedDBRepository } from '@/repositories/IndexedDbRepository';
 import type { RepositorioContable } from '@repositories/RepositorioContable';
-import type { Account, Transaction } from '@types-local/contabilidad';
+import type { User, Account, Transaction } from '@types-local/contabilidad';
 
 export class LedgerManager {
   private repository: RepositorioContable;
   private loaded: boolean = false;
 
   // Estados en memoria
-  private users: any[] = [];
+  private users: User[] = [];
   private books: any[] = [];
   private bookMembers: any[] = [];
   private accounts: Account[] = [];
@@ -42,12 +42,26 @@ export class LedgerManager {
   }
 
   // --- GETTERS ---
-  getUsers(): any[] {
+  getUsers(): User[] {
     return this.users;
+  }
+
+  /**
+   * Busca y retorna un usuario específico según su ID único.
+   */
+  getUserById(id: string): User | undefined {
+    return this.users.find((user) => user.id === id);
   }
 
   getBooks(): any[] {
     return this.books;
+  }
+
+  /**
+   * Busca y retorna un libro específico según su ID único.
+   */
+  getBookById(id: string): any | undefined {
+    return this.books.find((book) => book.id === id);
   }
 
   getBookMembers(): any[] {
@@ -67,6 +81,13 @@ export class LedgerManager {
 
   getTransactions(): Transaction[] {
     return this.transactions;
+  }
+
+  /**
+   * Busca y retorna una transaccion específica según su ID único.
+   */
+  getTransactionById(id: string): Transaction | undefined {
+    return this.transactions.find((transaction) => transaction.id === id);
   }
 
   /**
