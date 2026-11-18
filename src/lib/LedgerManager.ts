@@ -1,14 +1,14 @@
 // @lib/LedgerManager.ts
 import { IndexedDBRepository } from '@/repositories/IndexedDbRepository';
 import type { RepositorioContable } from '@repositories/RepositorioContable';
-import type { Account, Transaction } from '@types-local/contabilidad';
+import type { User, Account, Transaction } from '@types-local/contabilidad';
 
 export class LedgerManager {
   private repository: RepositorioContable;
   private loaded: boolean = false;
 
   // Estados en memoria
-  private users: any[] = [];
+  private users: User[] = [];
   private books: any[] = [];
   private bookMembers: any[] = [];
   private accounts: Account[] = [];
@@ -42,7 +42,7 @@ export class LedgerManager {
   }
 
   // --- GETTERS ---
-  getUsers(): any[] {
+  getUsers(): User[] {
     return this.users;
   }
 
