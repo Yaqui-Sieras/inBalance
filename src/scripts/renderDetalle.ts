@@ -22,21 +22,17 @@ export async function renderizarDetalleCuenta(): Promise<void> {
   if (elId) elId.textContent = accountId;
 
   // Delegamos la ejecución segura al envoltorio común
-  await ejecutarRenderSeguro(
-    async () => {
-      const cuenta = motorContable.getAccountById(accountId);
+  await ejecutarRenderSeguro(async () => {
+    const cuenta = motorContable.getAccountById(accountId);
 
-      if (!cuenta) {
-        if (elNombre) elNombre.textContent = MENSAJES.NO_ENCONTRADA;
-        return;
-      }
+    if (!cuenta) {
+      if (elNombre) elNombre.textContent = MENSAJES.NO_ENCONTRADA;
+      return;
+    }
 
-      if (elNombre) elNombre.textContent = `Detalle de Cuenta: ${cuenta.name}`;
-      if (elSaldo) elSaldo.textContent = cuenta.balance.toLocaleString();
-    },
-    'detalle de cuenta',
-    motorContable,
-  );
+    if (elNombre) elNombre.textContent = `Detalle de Cuenta: ${cuenta.name}`;
+    if (elSaldo) elSaldo.textContent = cuenta.balance.toLocaleString();
+  }, 'detalle de cuenta');
 }
 
 function getQueryParam(param: string): string | null {
