@@ -1,5 +1,5 @@
 ---
-// @components/welcome/WelcomeActions.astro
+// @components/Acceso/AccesoActions.astro
 import type { HTMLAttributes } from 'astro/types';
 import type { Properties } from 'csstype';
 import Box from '@components/UI/Common/Box.astro';
@@ -19,7 +19,7 @@ const {
 
 <Box
   id={idName}
-  class:list={['welcome_actions', className]}
+  class:list={['acceso_actions', className]}
   style={{
     ...(typeof userStyle === 'object' ? userStyle : {}),
   }}
@@ -71,7 +71,7 @@ const {
 </script>
 
 <style>
-  .welcome_actions {
+  .acceso_actions {
     gap: 0.5rem;
   }
 </style>
