@@ -13,14 +13,14 @@ const description =
 ---
 
 <AccessLayout titlePage={titlePage} description={description}>
-  <Box class="welcome_view">
+  <Box class="acceso_view">
     <AccesoHeader />
 
-    <Box id="welcome-card" class="welcome_view__content">
+    <Box class="acceso_view__content">
       <!-- Estado de Carga Inicial -->
-      <AccesoProfileSelection id="welcome-profile-selection" />
+      <AccesoProfileSelection />
 
-      <AccesoActions id="welcome-actions" />
+      <AccesoActions />
     </Box>
   </Box>
 </AccessLayout>
@@ -34,14 +34,14 @@ const description =
 </script>
 
 <style>
-  .welcome_view {
+  .acceso_view {
     flex: 1;
     flex-direction: column;
     justify-content: start;
     gap: 1.5rem;
   }
 
-  .welcome_view__content {
+  .acceso_view__content {
     max-width: 480px;
     background: #1f1f23;
     padding: 1rem 1.5rem;
