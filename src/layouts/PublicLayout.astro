@@ -1,5 +1,6 @@
 ---
 // @layouts/MainLayout.astro
+import ContentHeader from '@/components/UI/HeaderPage/ContentHeaderPublic.astro';
 import ContentFooter from '@/components/UI/FooterPage/ContentFooter.astro';
 import { buildUrl } from '@utils/url';
 import faviconsvg from '@assets/favicons/favicon.svg';
@@ -56,6 +57,10 @@ const faviconIcoPath = buildUrl('/favicon.ico');
   </head>
   <body>
     <div class="page">
+      <header class="page__header">
+        <ContentHeader />
+      </header>
+
       <main class="page__main">
         <slot />
       </main>
