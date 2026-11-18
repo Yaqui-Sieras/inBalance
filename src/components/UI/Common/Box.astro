@@ -40,25 +40,25 @@ const {
   <slot />
 </Tag>
 <style>
-  .ui_box {
+  :where(.ui_box, ) {
     transition: all 0.2s ease;
   }
 
   /* Valores <display-outside> */
-  .ui_box--block {
+  :where(.ui_box--block, ) {
     display: block;
   }
 
-  .ui_box--inline {
+  :where(.ui_box--inline, ) {
     display: inline;
   }
 
-  .ui_box--inline-block {
+  :where(.ui_box--inline-block, ) {
     display: inline-block;
   }
 
   /* Valores <display-inside> */
-  .ui_box--flex {
+  :where(.ui_box--flex, ) {
     width: 100%;
     max-width: 1280px;
     display: flex;
@@ -68,13 +68,13 @@ const {
   }
 
   @media (max-width: 640px) {
-    .ui_box--flex {
+    :where(.ui_box--flex, ) {
       flex-direction: column;
       text-align: center;
     }
   }
 
-  .ui_box--grid {
+  :where(.ui_box--grid, ) {
     width: 100%;
     max-width: 1280px;
     display: grid;
@@ -87,33 +87,33 @@ const {
   }
 
   /* Valores <display-outside> más valores <display-inside> */
-  .ui_box--inline-flex {
+  :where(.ui_box--inline-flex, ) {
     display: inline-flex;
   }
 
-  .ui_box--inline-grid {
+  :where(.ui_box--inline-grid, ) {
     display: inline-grid;
   }
 
   /* Valores <display-box> */
-  .ui_box--contents {
+  :where(.ui_box--contents, ) {
     display: contents;
   }
 
-  .ui_box--none {
+  :where(.ui_box--none, ) {
     display: none;
   }
 
   /* Valores globales */
-  .ui_box--inherit {
+  :where(.ui_box--inherit, ) {
     display: inherit;
   }
 
-  .ui_box--initial {
+  :where(.ui_box--initial, ) {
     display: initial;
   }
 
-  .ui_box--unset {
+  :where(.ui_box--unset, ) {
     display: unset;
   }
 </style>
