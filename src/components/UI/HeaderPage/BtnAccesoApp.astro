@@ -1,0 +1,36 @@
+---
+// @components/UI/HeaderPage/HeaderPublic.astro
+import Box from '@components/UI/Common/Box.astro';
+import Link from '@components/UI/Common/Link.astro';
+import { ROUTES } from '@constants/routes';
+
+const destinyPath = ROUTES.ACCESS;
+const returnPath = ROUTES.LANDING;
+const currentPath = Astro.url.pathname;
+const onDestiny: boolean = currentPath === destinyPath;
+---
+
+<Box class={'btn_acceso_app__container'}>
+  <Link href={onDestiny ? returnPath : destinyPath} class={'btn_acceso_app'}>
+    <slot>{onDestiny ? 'Volver a Home' : 'Acceder a la App'}</slot>
+  </Link>
+</Box>
+
+<style>
+  .btn_acceso_app__container {
+    width: auto;
+    padding: 0.5rem;
+  }
+
+  .btn_acceso_app {
+    font-size: 0.9rem;
+    font-weight: 600;
+    background-color: #2563eb;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.5rem;
+
+    &:hover {
+      background-color: #3b82f6;
+    }
+  }
+</style>

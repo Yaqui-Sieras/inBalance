@@ -1,7 +1,6 @@
 ---
 // @components/UI/HeaderPage.astro
 import Box from '@components/UI/Common/Box.astro';
-import Link from '@components/UI/Common/Link.astro';
 import Navigation from '@components/UI/Common/Navigation.astro';
 import { PUBLIC_NAV_ITEMS, ROUTES } from '@constants/routes';
 import LogoApp from '@components/UI/HeaderPage/LogoApp.astro';
@@ -16,9 +15,7 @@ import BtnAccesoApp from '@components/UI/HeaderPage/BtnAccesoApp.astro';
     linkClass={'nav_item'}
     linkCurrentClass={'nav_item--current'}
   />
-  <Link href={ROUTES.ACCESS} class={'header_page__link_acceso'}>
-    Acceder a la App
-  </Link>
+  <BtnAccesoApp />
 </Box>
 
 <style>
@@ -39,17 +36,5 @@ import BtnAccesoApp from '@components/UI/HeaderPage/BtnAccesoApp.astro';
   .nav_item--current {
     color: #2563eb;
     border-bottom: 5px solid #2563eb;
-  }
-
-  .header_page__link_acceso {
-    font-size: 0.9rem;
-    font-weight: 600;
-    background-color: #2563eb;
-    padding: 0.2rem 0.6rem;
-    border-radius: 0.5rem;
-
-    &:hover {
-      background-color: #3b82f6;
-    }
   }
 </style>
