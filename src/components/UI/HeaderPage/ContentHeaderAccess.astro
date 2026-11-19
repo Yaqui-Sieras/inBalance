@@ -1,31 +1,19 @@
 ---
-// @components/UI/HeaderPage.astro
+// @components/UI/HeaderPage/HeaderAcceso.astro
 import Box from '@components/UI/Common/Box.astro';
 import Link from '@components/UI/Common/Link.astro';
 import { ROUTES } from '@constants/routes';
+import LogoApp from '@components/UI/HeaderPage/LogoApp.astro';
+import BtnAccesoApp from '@components/UI/HeaderPage/BtnAccesoApp.astro';
 ---
 
 <Box class={'header_page__Container'}>
-  <Link href={ROUTES.LANDING} class={'header_page__link_acceso'}>
-    Volver a Home
-  </Link>
+  <LogoApp />
+  <BtnAccesoApp />
 </Box>
 
 <style>
   .header_page__Container {
-    padding-block: 0.5rem;
-    justify-content: end;
-  }
-
-  .header_page__link_acceso {
-    font-size: 0.9rem;
-    font-weight: 600;
-    background-color: #2563eb;
-    padding: 0.2rem 0.6rem;
-    border-radius: 0.5rem;
-
-    &:hover {
-      background-color: #3b82f6;
-    }
+    justify-content: space-between;
   }
 </style>
