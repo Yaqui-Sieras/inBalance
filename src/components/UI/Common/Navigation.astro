@@ -10,7 +10,7 @@ interface Props extends HTMLAttributes<'nav'> {
   links: readonly NavItem[];
   ariaLabel?: string;
   // Relacionado con el contenedor
-  navClass?: Properties;
+  navClass?: string;
   navStyle?: Properties;
   style?: Properties;
   // Relacionado con los estilos configurables de los links
@@ -77,13 +77,13 @@ const currentPath = Astro.url.pathname;
 </nav>
 
 <style>
-  .navigation {
+  :where(.navigation, ) {
     height: inherit;
     display: flex;
     align-items: center;
   }
 
-  .nav_list {
+  :where(.nav_list, ) {
     list-style: none;
     height: inherit;
     display: flex;
@@ -91,13 +91,13 @@ const currentPath = Astro.url.pathname;
     justify-content: center;
   }
 
-  .nav_item {
+  :where(.nav_item, ) {
     height: inherit;
     display: flex;
     align-items: center;
   }
 
-  .item_a {
+  :where(.item_a, ) {
     font-weight: 600;
     padding: 0.5rem 0.75rem;
     border-bottom: 5px solid transparent;

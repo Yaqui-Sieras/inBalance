@@ -7,13 +7,13 @@ import { APP_NAV_ITEMS } from '@constants/routes';
 ---
 
 <Box class={'header_page__Container'}>
-  <Link href="/" class="header_page__home_link" style={{ padding: '0.5rem' }}>
-    <h1 class="header_page__title">📊 inBalance</h1>
-    <p class="header_page__subtitle">Tu salud financiera de un vistazo</p>
+  <Link href="/" class="header_page__home_link">
+    <h1 class="home_link__title">📊 inBalance</h1>
+    <p class="home_link__subtitle">Tu salud financiera de un vistazo</p>
   </Link>
   <Navigation
     links={APP_NAV_ITEMS}
-    navStyle={{ position: 'absolute', left: '40%', bottom: 0, gap: '1.25rem' }}
+    navClass={'header_page__nav'}
     linkClass={'nav_item'}
     linkCurrentClass={'nav_item--current'}
   />
@@ -21,18 +21,26 @@ import { APP_NAV_ITEMS } from '@constants/routes';
 
 <style>
   .header_page__Container {
-    position: relative;
-    justify-content: start;
+    justify-content: space-between;
   }
 
-  .header_page__title {
+  .header_page__home_link {
+    padding: 0.5rem;
+  }
+
+  .home_link__title {
     font-size: 1.2rem;
     color: #3b82f6;
   }
 
-  .header_page__subtitle {
+  .home_link__subtitle {
     font-size: 1rem;
     color: #a1a1aa;
+  }
+
+  .header_page__nav {
+    align-self: end;
+    gap: 1.25rem;
   }
 
   .nav_item:hover {

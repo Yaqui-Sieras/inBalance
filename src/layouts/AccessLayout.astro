@@ -1,6 +1,7 @@
 ---
 // @layouts/MainLayout.astro
-import ContentFooter from '@components/UI/FooterPage.astro';
+import ContentHeader from '@/components/UI/HeaderPage/ContentHeaderAccess.astro';
+import ContentFooter from '@/components/UI/FooterPage/ContentFooter.astro';
 import { buildUrl } from '@utils/url';
 import faviconsvg from '@assets/favicons/favicon.svg';
 import ogImage from '@assets/imgs/og-image.png';
@@ -56,6 +57,10 @@ const faviconIcoPath = buildUrl('/favicon.ico');
   </head>
   <body>
     <div class="page">
+      <header class="page__header">
+        <ContentHeader />
+      </header>
+
       <main class="page__main">
         <slot />
       </main>
@@ -94,7 +99,7 @@ const faviconIcoPath = buildUrl('/favicon.ico');
     width: 100%;
     max-width: var(--max-screen-width);
     background-color: #151517;
-    padding: 2rem;
+    padding: 0.75rem 1.5rem;
     flex: 1 0 auto;
     display: flex;
     flex-direction: column;
