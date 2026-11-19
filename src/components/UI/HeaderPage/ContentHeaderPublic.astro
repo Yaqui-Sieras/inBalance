@@ -4,13 +4,12 @@ import Box from '@components/UI/Common/Box.astro';
 import Link from '@components/UI/Common/Link.astro';
 import Navigation from '@components/UI/Common/Navigation.astro';
 import { PUBLIC_NAV_ITEMS, ROUTES } from '@constants/routes';
+import LogoApp from '@components/UI/HeaderPage/LogoApp.astro';
+import BtnAccesoApp from '@components/UI/HeaderPage/BtnAccesoApp.astro';
 ---
 
 <Box class={'header_page__Container'}>
-  <Link href="/" class="header_page__home_link">
-    <h1 class="home_link__title">📊 inBalance</h1>
-    <p class="home_link__subtitle">Tu salud financiera de un vistazo</p>
-  </Link>
+  <LogoApp />
   <Navigation
     links={PUBLIC_NAV_ITEMS}
     navClass={'header_page__nav'}
@@ -25,20 +24,6 @@ import { PUBLIC_NAV_ITEMS, ROUTES } from '@constants/routes';
 <style>
   .header_page__Container {
     justify-content: space-between;
-  }
-
-  .header_page__home_link {
-    padding: 0.5rem;
-  }
-
-  .home_link__title {
-    font-size: 1.2rem;
-    color: #3b82f6;
-  }
-
-  .home_link__subtitle {
-    font-size: 1rem;
-    color: #a1a1aa;
   }
 
   .header_page__nav {

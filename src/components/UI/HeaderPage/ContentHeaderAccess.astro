@@ -3,12 +3,14 @@
 import Box from '@components/UI/Common/Box.astro';
 import Link from '@components/UI/Common/Link.astro';
 import { ROUTES } from '@constants/routes';
+import LogoApp from '@components/UI/HeaderPage/LogoApp.astro';
 ---
 
 <Box class={'header_page__Container'}>
   <Link href={ROUTES.LANDING} class={'header_page__link_acceso'}>
     Volver a Home
   </Link>
+  <LogoApp />
 </Box>
 
 <style>
