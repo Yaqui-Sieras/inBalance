@@ -1,17 +1,38 @@
 ---
 // @pages/index.astro
 import PublicLayout from '@layouts/PublicLayout.astro';
+import Box from '@/components/UI/Common/Box.astro';
 
 const titlePage = 'InBalance | Dashboard';
 const description = 'Panel de control principal de inBalance.';
 ---
 
 <PublicLayout titlePage={titlePage} description={description}>
-  <h2 class={'Inicio__title_provisional'}>Inicio</h2>
+  <Box as="section" class={'landing_page'}>
+    <h2 class={'landing_page__title'}>🚧 Home en desarrollo 🚧</h2>
+    <p class={'landing_page__desciption'}>
+      Vienen grandes cosas, agradecemos su paciencia.
+    </p>
+  </Box>
 </PublicLayout>
 
 <style>
   .Inicio__title_provisional {
+    text-align: center;
+  }
+
+  .landing_page {
+    flex: 1;
+    flex-direction: column;
+    justify-content: start;
+    gap: 0.8rem;
+  }
+
+  .landing_page__title {
+    text-align: center;
+  }
+
+  .landing_page__description {
     text-align: center;
   }
 </style>
