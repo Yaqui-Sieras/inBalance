@@ -3,7 +3,7 @@
 import Box from '@components/UI/Common/Box.astro';
 import Link from '@components/UI/Common/Link.astro';
 import Navigation from '@components/UI/Common/Navigation.astro';
-import { PUBLIC_NAV_ITEMS } from '@constants/routes';
+import { PUBLIC_NAV_ITEMS, ROUTES } from '@constants/routes';
 ---
 
 <Box class={'header_page__Container'}>
@@ -17,7 +17,7 @@ import { PUBLIC_NAV_ITEMS } from '@constants/routes';
     linkClass={'nav_item'}
     linkCurrentClass={'nav_item--current'}
   />
-  <Link href="/acceso/" class={'header_page__link_acceso'}>
+  <Link href={ROUTES.ACCESS} class={'header_page__link_acceso'}>
     Acceder a la App
   </Link>
 </Box>
