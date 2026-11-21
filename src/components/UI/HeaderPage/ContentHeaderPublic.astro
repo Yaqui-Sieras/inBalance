@@ -3,12 +3,12 @@
 import Box from '@components/UI/Common/Box.astro';
 import Navigation from '@components/UI/Common/Navigation.astro';
 import { PUBLIC_NAV_ITEMS, ROUTES } from '@constants/routes';
-import LogoApp from '@components/UI/HeaderPage/LogoApp.astro';
+import HomeLink from '@components/UI/HeaderPage/HomeLink.astro';
 import BtnAccesoApp from '@components/UI/HeaderPage/BtnAccesoApp.astro';
 ---
 
 <Box class={'header_page__Container'}>
-  <LogoApp />
+  <HomeLink />
   <Navigation
     links={PUBLIC_NAV_ITEMS}
     navClass={'header_page__nav'}
