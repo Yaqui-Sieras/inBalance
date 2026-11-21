@@ -3,7 +3,8 @@ interface AssetMetadata {
   src: string;
   width: number;
   height: number;
-  format: string;
+  format:
+    'jpeg' | 'jpg' | 'png' | 'apng' | 'tiff' | 'webp' | 'gif' | 'svg' | 'avif';
   orientation?: number;
 }
 

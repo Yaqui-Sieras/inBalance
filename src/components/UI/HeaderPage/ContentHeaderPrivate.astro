@@ -1,14 +1,13 @@
 ---
 // @components/UI/HeaderPage/HeaderPrivate.astro
 import Box from '@components/UI/Common/Box.astro';
-import Link from '@components/UI/Common/Link.astro';
 import Navigation from '@components/UI/Common/Navigation.astro';
 import { APP_NAV_ITEMS } from '@constants/routes';
-import LogoApp from '@components/UI/HeaderPage/LogoApp.astro';
+import HomeLink from '@components/UI/HeaderPage/HomeLink.astro';
 ---
 
 <Box class={'header_page__Container'}>
-  <LogoApp />
+  <HomeLink />
   <Navigation
     links={APP_NAV_ITEMS}
     navClass={'header_page__nav'}
