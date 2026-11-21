@@ -1,0 +1,48 @@
+---
+// src/components/StatIcon.astro
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'svg'> {
+  decorative?: boolean;
+}
+
+const {
+  id: idName = '',
+  width,
+  height,
+  color = 'currentColor',
+  decorative = true,
+  class: className = '',
+  style: userStyle,
+  ...rest
+} = Astro.props;
+---
+
+<svg
+  class:list={['stat-icon', className]}
+  style={{
+    ...(typeof userStyle === 'object' ? userStyle : {}),
+  }}
+  fill="none"
+  stroke="currentColor"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  viewBox="0 0 24 24"
+  aria-hidden={decorative ? 'true' : undefined}
+  {...rest}
+>
+  <line x1="18" x2="18" y1="20" y2="10"></line>
+  <line x1="12" x2="12" y1="20" y2="4"></line>
+  <line x1="6" x2="6" y1="20" y2="14"></line>
+  <line x1="2" x2="22" y1="20" y2="20"></line>
+</svg>
+
+<style>
+  :where(.stat-icon, ) {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: currentColor;
+    flex-shrink: 0;
+  }
+</style>
