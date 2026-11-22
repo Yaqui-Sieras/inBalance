@@ -19,7 +19,8 @@ const {
 ---
 
 <svg
-  class:list={['stat-icon', className]}
+  id={idName}
+  class:list={['stat_icon', className]}
   style={{
     ...(typeof userStyle === 'object' ? userStyle : {}),
   }}
@@ -39,7 +40,7 @@ const {
 </svg>
 
 <style>
-  :where(.stat-icon, ) {
+  :where(.stat_icon, ) {
     width: 1.25rem;
     height: 1.25rem;
     color: currentColor;

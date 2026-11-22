@@ -1,7 +1,8 @@
 ---
-// @layouts/MainLayout.astro
-import ContentHeader from '@/components/UI/HeaderPage/ContentHeaderPrivate.astro';
-import ContentFooter from '@/components/UI/FooterPage/ContentFooter.astro';
+// @layouts/BaseLayout.astro
+import FondoEstilado from '@components/UI/FondoEstilado.astro';
+import ContentHeader from '@components/UI/HeaderPage/ContentHeader.astro';
+import ContentFooter from '@components/UI/FooterPage/ContentFooter.astro';
 import { buildUrl } from '@utils/url';
 import faviconsvg from '@assets/favicons/favicon.svg';
 import ogImage from '@assets/imgs/og-image.png';
@@ -16,7 +17,7 @@ interface Props {
 
 const {
   titlePage,
-  description = 'Descripción por defecto de la página',
+  description,
   image = ogImage.src,
   author = 'Yaqui-Sieras',
 } = Astro.props;
@@ -36,7 +37,7 @@ const faviconIcoPath = buildUrl('/favicon.ico');
 
     <!-- SEO Principal -->
     <title>{titlePage}</title>
-    <meta name="description" content={description} />
+    {description && <meta name="description" content={description} />}
     <meta name="author" content={author} />
     <link rel="canonical" href={canonicalURL} />
     <meta name="robots" content="index, follow" />
@@ -55,8 +56,9 @@ const faviconIcoPath = buildUrl('/favicon.ico');
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageURL} />
   </head>
-  <body>
+  <body style={'background-color: #020617;'}>
     <div class="page">
+      <FondoEstilado />
       <header class="page__header">
         <ContentHeader />
       </header>
@@ -78,6 +80,7 @@ const faviconIcoPath = buildUrl('/favicon.ico');
   }
   .page {
     width: 100dvw;
+    max-width: none;
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
@@ -88,8 +91,8 @@ const faviconIcoPath = buildUrl('/favicon.ico');
   .page__header {
     width: 100%;
     max-width: var(--max-screen-width);
-    padding-inline: 1.5rem;
-    background-color: #1b1d1f;
+    background-color: rgb(15 23 42 / 0.6);
+    border-block-end: 1px solid rgba(30, 41, 59, 0.8);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -98,7 +101,7 @@ const faviconIcoPath = buildUrl('/favicon.ico');
   .page__main {
     width: 100%;
     max-width: var(--max-screen-width);
-    background-color: #151517;
+    /* background-color: #151517; */
     padding: 0.75rem 1.5rem;
     flex: 1 0 auto;
     display: flex;
@@ -109,8 +112,10 @@ const faviconIcoPath = buildUrl('/favicon.ico');
   .page__footer {
     width: 100%;
     max-width: var(--max-screen-width);
-    padding: 0.75rem 1.5rem;
-    background-color: #1b1d1f;
+    color: #64748b;
+    /* background-color: #1b1d1f; */
+    background-color: rgb(2 6 23 / 0.8);
+    border-block-start: 1px solid #0f172a;
     display: flex;
     align-items: center;
     justify-content: center;

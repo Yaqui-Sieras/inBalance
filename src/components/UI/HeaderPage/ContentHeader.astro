@@ -1,0 +1,59 @@
+---
+// @components/UI/HeaderPage/HeaderPage.astro
+import Box from '@components/UI/Common/Box.astro';
+import Navigation from '@components/UI/Common/Navigation.astro';
+import HomeLink from '@components/UI/HeaderPage/HomeLink.astro';
+import BtnAccesoApp from '@components/UI/HeaderPage/BtnAccesoApp.astro';
+import { APP_NAV_ITEMS, PUBLIC_NAV_ITEMS, ROUTES } from '@constants/routes';
+
+const pathname = Astro.url.pathname;
+const is404 = Astro.response.status === 404;
+
+const isSection = (path: string, base: string) =>
+  path === base || path.startsWith(`${base}/`);
+
+const isAccessRoute = !is404 && isSection(pathname, ROUTES.ACCESS);
+const isPrivateRoute = !is404 && isSection(pathname, ROUTES.APPDASHBOARD);
+const isPublicRoute = !isAccessRoute && !isPrivateRoute;
+
+const navLinks = isPrivateRoute
+  ? APP_NAV_ITEMS
+  : isPublicRoute
+    ? PUBLIC_NAV_ITEMS
+    : null;
+
+const showAccessBtn = isAccessRoute || isPublicRoute;
+---
+
+<Box class="header_page__Container">
+  <HomeLink />
+
+  {navLinks && (
+    <Navigation
+      links={navLinks}
+      navClass="header_page__nav"
+      linkClass="nav_item"
+      linkCurrentClass="nav_item--current"
+    />
+  )}
+
+  {showAccessBtn && <BtnAccesoApp />}
+</Box>
+
+<style>
+  .header_page__Container {
+    padding-inline: 1.5rem;
+    justify-content: space-between;
+  }
+
+  .header_page__nav {
+    align-self: end;
+    gap: 1.25rem;
+  }
+
+  .nav_item:hover,
+  .nav_item--current {
+    color: #2563eb;
+    border-bottom: 5px solid #2563eb;
+  }
+</style>
