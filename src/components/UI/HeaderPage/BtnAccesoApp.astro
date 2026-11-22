@@ -3,16 +3,27 @@
 import Box from '@components/UI/Common/Box.astro';
 import Link from '@components/UI/Common/Link.astro';
 import { ROUTES } from '@constants/routes';
+import BackArrowSvg from '@assets/imgs/svg/BackArrowSvg.astro';
 
-const destinyPath = ROUTES.ACCESS;
-const returnPath = ROUTES.LANDING;
 const currentPath = Astro.url.pathname;
-const onDestiny: boolean = currentPath === destinyPath;
+const accessBase = ROUTES.ACCESS;
+const homePath = ROUTES.LANDING;
+
+const isInAccess =
+  currentPath === accessBase || currentPath.startsWith(`${accessBase}/`);
+const isInPublic = !isInAccess;
+
+const targetHref = isInAccess ? homePath : accessBase;
+const buttonLabel = isInAccess ? 'Volver a Home' : 'Acceder a la App';
 ---
 
-<Box class={'btn_acceso_app__container'}>
-  <Link href={onDestiny ? returnPath : destinyPath} class={'btn_acceso_app'}>
-    <slot>{onDestiny ? 'Volver a Home' : 'Acceder a la App'}</slot>
+<Box class="btn_acceso_app__container">
+  <Link
+    href={targetHref}
+    class={`btn_acceso_app ${isInPublic ? 'btn_acceso_app__in_public' : 'btn_acceso_app__in_acceso'}`}
+  >
+    {isInAccess && <BackArrowSvg />}
+    {buttonLabel}
   </Link>
 </Box>
 
@@ -23,14 +34,49 @@ const onDestiny: boolean = currentPath === destinyPath;
   }
 
   .btn_acceso_app {
+    color: #94a3b8;
     font-size: 0.9rem;
-    font-weight: 600;
-    background-color: #2563eb;
-    padding: 0.3rem 0.6rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid rgba(51, 65, 85, 0.7);
     border-radius: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    box-shadow:
+      0 0 #0000,
+      0 0 #0000,
+      0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+    &:hover {
+      color: #e2e8f0;
+      background-color: #3b82f6;
+    }
+  }
+
+  .btn_acceso_app__in_public {
+    color: #e2e8f0;
+    background-color: #2563eb;
+    border: 1px solid rgba(51, 65, 85, 0.7);
 
     &:hover {
       background-color: #3b82f6;
+    }
+  }
+
+  .btn_acceso_app__in_acceso {
+    color: #94a3b8;
+    background-color: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(51, 65, 85, 0.7);
+    box-shadow:
+      0 0 #0000,
+      0 0 #0000,
+      0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+    &:hover {
+      color: #e2e8f0;
+      background-color: rgba(51, 65, 85, 0.8);
     }
   }
 </style>
